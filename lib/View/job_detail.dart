@@ -10,11 +10,12 @@ class JobDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(job.company),
+        title: const Text('Job Detail'),
       ),
       body: Center(
         child: Column(
           children: [
+            Text(job.company),
             Text(job.jobTitle),
             Text(job.level),
             Text(job.postedAt),

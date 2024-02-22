@@ -1,4 +1,5 @@
 class Job {
+  final int id;
   final String company;
   // final bool new;
   final String jobTitle;
@@ -9,6 +10,7 @@ class Job {
   final List<String> skills;
 
   const Job({
+    required this.id,
     required this.company,
     // required this.new,
     required this.jobTitle,
@@ -21,6 +23,7 @@ class Job {
 
   factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
+      id: json['id'],
       company: json['company'],
       // new: json['new'],
       jobTitle: json['jobTitle'],

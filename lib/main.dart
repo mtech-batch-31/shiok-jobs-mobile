@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Job Search'),
           ),
-          body: JobList(),
+          body: const JobList(),
+          backgroundColor: Colors.indigo[50],
         ));
   }
 }
