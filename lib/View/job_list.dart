@@ -38,20 +38,25 @@ class _JobListState extends State<JobList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: searchTextField(),
-        ),
-        Expanded(
-          child: filteredJobList.isEmpty
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : listViewBuilder(),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Job List'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(child: searchTextField()),
+          ),
+          Expanded(
+            child: filteredJobList.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : listViewBuilder(),
+          ),
+        ],
+      ),
     );
   }
 

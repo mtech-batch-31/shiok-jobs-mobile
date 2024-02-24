@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/View/job_list.dart';
+import 'package:shiok_jobs_flutter/View/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,10 +23,7 @@ class MyApp extends StatelessWidget {
         title: 'Job Search App',
         theme: ThemeData(useMaterial3: true),
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Job Search'),
-          ),
-          body: const JobList(),
+          body: const LoginPage(),
           backgroundColor: Colors.indigo[50],
         ));
   }
