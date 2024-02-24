@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/View/job_list.dart';
+import 'package:shiok_jobs_flutter/View/home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
       postRegisterAPI();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const JobList()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     }
   }

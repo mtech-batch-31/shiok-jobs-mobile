@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/View/job_list.dart';
+import 'package:shiok_jobs_flutter/View/home_page.dart';
 import 'package:shiok_jobs_flutter/View/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
       postLoginAPI();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const JobList()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     }
   }
