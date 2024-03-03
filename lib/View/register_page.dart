@@ -1,5 +1,10 @@
+import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
+import 'package:shiok_jobs_flutter/Model/signup.dart';
 import 'package:shiok_jobs_flutter/View/home_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,6 +16,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  var errorMessage = '';
 
   @override
   void dispose() {
@@ -42,6 +49,13 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         const SizedBox(height: 16),
         TextField(
+          controller: emailController,
+          decoration: const InputDecoration(
+            labelText: 'Email',
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextField(
           controller: passwordController,
           decoration: const InputDecoration(
             labelText: 'Password',
@@ -59,19 +73,64 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void textFieldValidation() {
-    debugPrint('Text Field Validation');
     if (userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
       debugPrint('Text Field Validation Success');
-      postRegisterAPI();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      postSignUpAPI(
+              userName: userNameController.text,
+              password: passwordController.text,
+              email: emailController.text)
+          .then((value) => {
+                if (value?.httpStatusCode == 200)
+                  {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    )
+                  }
+                else
+                  {
+                    errorMessage = value?.error ?? 'Error Occurred',
+                    debugPrint('errorMessage $errorMessage'),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('errorMessage'),
+                      ),
+                    ),
+                    debugPrint(value?.toString())
+                  }
+              });
     }
   }
 
-  void postRegisterAPI() {
-    debugPrint('Register API');
+  Future<CodeDeliveryResponse?> postSignUpAPI(
+      {required userName, required password, required email}) async {
+    String apiUrl = dotenv.env['API_URL']!;
+    String signupApiEndPoint = '$apiUrl/auth/SignUp';
+    debugPrint(signupApiEndPoint);
+    final res = await http.post(
+      Uri.parse(signupApiEndPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: convert.jsonEncode(<String, String>{
+        'username': userName,
+        'password': password,
+        'email': email,
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      final decodedJson = convert.jsonDecode(res.body);
+      final response = CodeDeliveryResponse.fromJson(decodedJson);
+      return response;
+    } else {
+      return null;
+    }
+    //     .then((value) {
+    //   final decodedJson = convert.jsonDecode(value.body);
+    //   final response = CodeDeliveryResponse.fromJson(decodedJson);
+    //   return response;
+    // });
   }
 }
