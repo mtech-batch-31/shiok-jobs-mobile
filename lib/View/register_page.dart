@@ -2,7 +2,7 @@ import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Model/signup.dart';
-import 'package:shiok_jobs_flutter/View/home_page.dart';
+import 'package:shiok_jobs_flutter/View/email_verification_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -81,20 +81,23 @@ class _RegisterPageState extends State<RegisterPage> {
               password: passwordController.text,
               email: emailController.text)
           .then((value) => {
+                debugPrint(value.toString()),
                 if (value?.httpStatusCode == 200)
                   {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(
+                          builder: (context) => const EmailVerificationPage()),
                     )
                   }
                 else
                   {
+                    debugPrint(value?.error ?? 'Error Occurred'),
                     errorMessage = value?.error ?? 'Error Occurred',
                     debugPrint('errorMessage $errorMessage'),
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('errorMessage'),
+                      SnackBar(
+                        content: Text(errorMessage),
                       ),
                     ),
                     debugPrint(value?.toString())
@@ -120,13 +123,11 @@ class _RegisterPageState extends State<RegisterPage> {
       }),
     );
 
-    if (res.statusCode == 200) {
-      final decodedJson = convert.jsonDecode(res.body);
-      final response = CodeDeliveryResponse.fromJson(decodedJson);
-      return response;
-    } else {
-      return null;
-    }
+    debugPrint(res.body);
+    debugPrint(res.statusCode.toString());
+    final decodedJson = convert.jsonDecode(res.body);
+    final response = CodeDeliveryResponse.fromJson(decodedJson);
+    return response;
     //     .then((value) {
     //   final decodedJson = convert.jsonDecode(value.body);
     //   final response = CodeDeliveryResponse.fromJson(decodedJson);
