@@ -1,34 +1,55 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:shiok_jobs_flutter/Model/ConfirmSignUp/confirm_sign_up_request.dart';
+import 'package:shiok_jobs_flutter/Model/ConfirmSignUp/confirm_sign_up_response.dart';
+import 'package:shiok_jobs_flutter/NetworkClient/network_client.dart';
 
 class EmailVerificationPage extends StatelessWidget {
-  const EmailVerificationPage({Key? key}) : super(key: key);
+  const EmailVerificationPage({required this.userName, super.key});
+
+  final String userName;
+
   @override
   Widget build(BuildContext context) {
+    var pinEntered = '';
     return Scaffold(
       appBar: AppBar(
-        title: Text('Email Verification'),
+        title: const Text('Email Verification'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('Please verify your email'),
-            const SizedBox(height: 20),
+            const Text(
+                'Please verify your email with OTP to your registered email address'),
+            const SizedBox(height: 50),
             OTPTextField(
               length: 6,
               width: MediaQuery.of(context).size.width,
               fieldWidth: MediaQuery.of(context).size.width / 6,
               style: const TextStyle(fontSize: 17),
               textFieldAlignment: MainAxisAlignment.spaceAround,
-              fieldStyle: FieldStyle.underline,
+              fieldStyle: FieldStyle.box,
               onCompleted: (pin) {
-                debugPrint("Completed: " + pin);
+                debugPrint("Completed: $pin");
+                pinEntered = pin;
               },
               onChanged: (pin) {
-                debugPrint("editing: " + pin);
+                debugPrint("editing: $pin");
               },
+            ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                // Send email verification
+                debugPrint('OTP: $pinEntered');
+                sendEmailVerification(user: userName, pin: pinEntered);
+              },
+              child: const Text('Verify Email'),
             ),
           ],
         ),
@@ -36,41 +57,23 @@ class EmailVerificationPage extends StatelessWidget {
     );
   }
 
-  Row buildSixDigitsInput() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        buildInputField(),
-        buildInputField(),
-        buildInputField(),
-        buildInputField(),
-        buildInputField(),
-        buildInputField(),
-      ],
-    );
-  }
-
-  Container buildInputField() {
-    return Container(
-      width: 50,
-      height: 50,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: Border.all(width: 1),
-      ),
-      child: TextField(
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        maxLength: 1,
-        decoration: InputDecoration(
-          counterText: '',
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-
-  void sendEmailVerification() {
+  Future<ConfirmSignUpModel?> sendEmailVerification(
+      {required String user, required String pin}) async {
     // Send email verification
+    final client = NetworkClient();
+    final request = ConfirmSignUpRequest(username: user, code: pin);
+    try {
+      client.setHeaders({'Content-Type': 'application/json'});
+      String apiUrl = dotenv.env['API_URL']!;
+      final response = await client.post(
+        '$apiUrl/auth/ConfirmSignup',
+        body: request.toJson(),
+      );
+
+      return ConfirmSignUpModel.fromJson(response);
+    } catch (e) {
+      debugPrint('Error: $e');
+      return null;
+    }
   }
 }

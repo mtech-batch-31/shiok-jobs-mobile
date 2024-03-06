@@ -73,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void textFieldValidation() {
+    String usrName = userNameController.text;
     if (userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
       debugPrint('Text Field Validation Success');
@@ -87,7 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const EmailVerificationPage()),
+                          builder: (context) => EmailVerificationPage(
+                                userName: usrName,
+                              )),
                     )
                   }
                 else
@@ -128,10 +131,5 @@ class _RegisterPageState extends State<RegisterPage> {
     final decodedJson = convert.jsonDecode(res.body);
     final response = CodeDeliveryResponse.fromJson(decodedJson);
     return response;
-    //     .then((value) {
-    //   final decodedJson = convert.jsonDecode(value.body);
-    //   final response = CodeDeliveryResponse.fromJson(decodedJson);
-    //   return response;
-    // });
   }
 }
