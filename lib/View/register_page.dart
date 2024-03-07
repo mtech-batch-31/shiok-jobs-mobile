@@ -1,10 +1,7 @@
-import 'dart:convert' as convert;
-
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/Data/response/signup_response.dart';
+import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
 import 'package:shiok_jobs_flutter/View/email_verification_page.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,10 +16,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   var errorMessage = '';
 
+  SignUpBloc _signUpBloc = SignUpBloc();
+
+  @override
   @override
   void dispose() {
     userNameController.dispose();
     passwordController.dispose();
+    emailController.dispose();
+    _signUpBloc.dispose();
     super.dispose();
   }
 
@@ -36,100 +38,89 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
-      body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        TextField(
-          controller: userNameController,
-          decoration: const InputDecoration(
-            labelText: 'Username',
-          ),
+        appBar: AppBar(
+          title: const Text('Register'),
         ),
-        const SizedBox(height: 16),
-        TextField(
-          controller: emailController,
-          decoration: const InputDecoration(
-            labelText: 'Email',
+        body: Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TextField(
+            controller: userNameController,
+            decoration: const InputDecoration(
+              labelText: 'Username',
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          controller: passwordController,
-          decoration: const InputDecoration(
-            labelText: 'Password',
+          const SizedBox(height: 16),
+          TextField(
+            controller: emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            ),
           ),
-          obscureText: true,
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-            onPressed: () {
-              textFieldValidation();
-            },
-            child: const Text('Register')),
-      ])),
-    );
+          const SizedBox(height: 16),
+          TextField(
+            controller: passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+              onPressed: () {
+                textFieldValidation();
+              },
+              child: const Text('Register')),
+          StreamBuilder(
+              stream: _signUpBloc.signUpStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  switch (snapshot.data?.status) {
+                    case Status.LOADING:
+                      return const Center(child: CircularProgressIndicator());
+                    case Status.COMPLETED:
+                      routeToEmailVerificationPage();
+                    case Status.ERROR:
+                      showSnackBar(
+                          message: snapshot.data?.message ?? 'Error Occurred');
+                    case null:
+                    // TODO: Handle this case.
+                  }
+                }
+                return const SizedBox.shrink();
+              }),
+        ])));
   }
 
   void textFieldValidation() {
-    String usrName = userNameController.text;
     if (userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
-      debugPrint('Text Field Validation Success');
-      postSignUpAPI(
-              userName: userNameController.text,
-              password: passwordController.text,
-              email: emailController.text)
-          .then((value) => {
-                debugPrint(value.toString()),
-                if (value?.httpStatusCode == 200)
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EmailVerificationPage(
-                                userName: usrName,
-                              )),
-                    )
-                  }
-                else
-                  {
-                    debugPrint(value?.error ?? 'Error Occurred'),
-                    errorMessage = value?.error ?? 'Error Occurred',
-                    debugPrint('errorMessage $errorMessage'),
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(errorMessage),
-                      ),
-                    ),
-                    debugPrint(value?.toString())
-                  }
-              });
+      _signUpBloc.signUp(
+          user: userNameController.text,
+          password: passwordController.text,
+          email: emailController.text);
     }
   }
 
-  Future<CodeDeliveryResponse?> postSignUpAPI(
-      {required userName, required password, required email}) async {
-    String apiUrl = dotenv.env['API_URL']!;
-    String signupApiEndPoint = '$apiUrl/auth/SignUp';
-    debugPrint(signupApiEndPoint);
-    final res = await http.post(
-      Uri.parse(signupApiEndPoint),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: convert.jsonEncode(<String, String>{
-        'username': userName,
-        'password': password,
-        'email': email,
-      }),
-    );
+  routeToEmailVerificationPage() {
+    return WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EmailVerificationPage(
+                  userName: userNameController.text,
+                )),
+      );
+    });
+  }
 
-    debugPrint(res.body);
-    debugPrint(res.statusCode.toString());
-    final decodedJson = convert.jsonDecode(res.body);
-    final response = CodeDeliveryResponse.fromJson(decodedJson);
-    return response;
+  showSnackBar({required String message}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    });
   }
 }

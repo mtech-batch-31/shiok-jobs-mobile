@@ -33,6 +33,7 @@ class NetworkClient {
       {String method = 'GET', Map<String, dynamic>? body}) async {
     final uri = Uri.parse(url);
     final request = http.Request(method, uri);
+    request.headers.addAll(_headers);
     if (body != null) {
       request.body = jsonEncode(body);
     }
@@ -45,7 +46,7 @@ class NetworkClient {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());
-        debugPrint(responseJson);
+        debugPrint(responseJson.toString());
         return responseJson;
       case 400:
         throw BadRequestException(response.body.toString());
