@@ -1,20 +1,19 @@
-import 'package:flutter/foundation.dart';
-import 'package:shiok_jobs_flutter/Model/error_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/error_response.dart';
 
-class ConfirmSignUpModel extends ErrorResponse {
+class ConfirmSignUpResponse extends ErrorResponse {
   final ResponseMetadata? responseMetadata;
   final int? contentLength;
   final int? httpStatusCode;
 
-  ConfirmSignUpModel({
+  ConfirmSignUpResponse({
     this.responseMetadata,
     this.contentLength,
     this.httpStatusCode,
   });
 
   // Factory constructor for easier JSON parsing
-  factory ConfirmSignUpModel.fromJson(Map<String, dynamic> json) =>
-      ConfirmSignUpModel(
+  factory ConfirmSignUpResponse.fromJson(Map<String, dynamic> json) =>
+      ConfirmSignUpResponse(
         responseMetadata: json['responseMetadata'] != null
             ? ResponseMetadata.fromJson(json['responseMetadata'])
             : null,

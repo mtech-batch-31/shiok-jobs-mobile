@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/Model/job_model.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_response.dart';
 
 class JobDetail extends StatelessWidget {
   const JobDetail({required this.job, super.key});

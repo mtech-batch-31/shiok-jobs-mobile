@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shiok_jobs_flutter/NetworkClient/app_excepton.dart';
 
 class NetworkClient {
   static final NetworkClient _instance = NetworkClient._internal();
@@ -35,19 +36,26 @@ class NetworkClient {
     if (body != null) {
       request.body = jsonEncode(body);
     }
-    request.headers.addAll({
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
     final streamedResponse = await http.Client().send(request);
     final response = await http.Response.fromStream(streamedResponse);
     return response;
   }
 
   dynamic _handleResponse(http.Response response) {
-    debugPrint('Response: ${response.body}');
-    var responseJson = json.decode(response.body);
-    debugPrint(responseJson);
-    debugPrint("test  $responseJson");
-    return responseJson;
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = json.decode(response.body.toString());
+        debugPrint(responseJson);
+        return responseJson;
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+      default:
+        throw FetchDataException(
+            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+    }
   }
 }

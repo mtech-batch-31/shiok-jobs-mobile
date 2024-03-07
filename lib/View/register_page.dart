@@ -1,7 +1,7 @@
 import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/Model/signup.dart';
+import 'package:shiok_jobs_flutter/Data/response/signup_response.dart';
 import 'package:shiok_jobs_flutter/View/email_verification_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;

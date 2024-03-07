@@ -1,17 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
-import 'package:shiok_jobs_flutter/Model/ConfirmSignUp/confirm_sign_up_request.dart';
-import 'package:shiok_jobs_flutter/Model/ConfirmSignUp/confirm_sign_up_response.dart';
-import 'package:shiok_jobs_flutter/NetworkClient/network_client.dart';
+import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
+import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/confirm_sign_up_response.dart';
 
-class EmailVerificationPage extends StatelessWidget {
+class EmailVerificationPage extends StatefulWidget {
   const EmailVerificationPage({required this.userName, super.key});
 
   final String userName;
+
+  @override
+  State<StatefulWidget> createState() => _EmailVerificationPageState();
+}
+
+class _EmailVerificationPageState extends State<EmailVerificationPage> {
+  final _signUpBloc = SignUpBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class EmailVerificationPage extends StatelessWidget {
               onPressed: () {
                 // Send email verification
                 debugPrint('OTP: $pinEntered');
-                sendEmailVerification(user: userName, pin: pinEntered);
+                sendEmailVerification(user: widget.userName, pin: pinEntered);
               },
               child: const Text('Verify Email'),
             ),
@@ -57,23 +61,31 @@ class EmailVerificationPage extends StatelessWidget {
     );
   }
 
-  Future<ConfirmSignUpModel?> sendEmailVerification(
-      {required String user, required String pin}) async {
-    // Send email verification
-    final client = NetworkClient();
-    final request = ConfirmSignUpRequest(username: user, code: pin);
-    try {
-      client.setHeaders({'Content-Type': 'application/json'});
-      String apiUrl = dotenv.env['API_URL']!;
-      final response = await client.post(
-        '$apiUrl/auth/ConfirmSignup',
-        body: request.toJson(),
-      );
-
-      return ConfirmSignUpModel.fromJson(response);
-    } catch (e) {
-      debugPrint('Error: $e');
-      return null;
-    }
+  sendEmailVerification({required String user, required String pin}) {
+    _signUpBloc.sendEmailVerification(user: user, pin: pin);
+    StreamBuilder<ApiResponse<ConfirmSignUpResponse>>(
+      stream: _signUpBloc.signUpStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          switch (snapshot.data?.status) {
+            case Status.LOADING:
+              return const Center(child: CircularProgressIndicator());
+            case Status.COMPLETED:
+              debugPrint('Email Verification Completed');
+              return const Center(
+                child: Text('Email Verification Completed'),
+              );
+            case Status.ERROR:
+              debugPrint('Error: ${snapshot.data?.message}');
+              return Center(
+                child: Text(snapshot.data?.message ?? 'Error Occurred'),
+              );
+            case null:
+            // TODO: Handle this case.
+          }
+        }
+        return const SizedBox();
+      },
+    );
   }
 }
