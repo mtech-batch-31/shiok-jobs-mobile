@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/View/login_page.dart';
+import 'package:shiok_jobs_flutter/View/login_view.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: 'env/dev.env');
   runApp(const MyApp());
 }
 

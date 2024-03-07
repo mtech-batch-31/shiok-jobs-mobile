@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shiok_jobs_flutter/Model/job_model.dart';
-import 'package:shiok_jobs_flutter/View/job_detail.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_response.dart';
+import 'package:shiok_jobs_flutter/View/job_detail_view.dart';
 
 class JobList extends StatefulWidget {
   const JobList({super.key});

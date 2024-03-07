@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/View/home_page.dart';
-import 'package:shiok_jobs_flutter/View/register_page.dart';
+import 'package:shiok_jobs_flutter/View/home_view.dart';
+import 'package:shiok_jobs_flutter/View/register_view.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

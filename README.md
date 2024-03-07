@@ -1,16 +1,8 @@
 # shiok_jobs_flutter
 
-A new Flutter project.
+Flutter project for SJ Job Application
 
-## Getting Started
+## Architecture Software Design Pattern
+Following best practice to use Bloc and Repository. Referencing to this  [article.](https://medium.com/flutter-community/handling-network-calls-like-a-pro-in-flutter-31bd30c86be1)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Basic Architecture](Architecture.png)

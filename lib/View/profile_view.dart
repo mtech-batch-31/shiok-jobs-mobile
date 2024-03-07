@@ -11,8 +11,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Page'),
-      ),
+          leading: IconButton(
+        icon: const Icon(Icons.logout),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      )),
       body: const Center(
         child: Text('Profile Page'),
       ),
