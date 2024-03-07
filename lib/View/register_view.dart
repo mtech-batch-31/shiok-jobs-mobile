@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
-import 'package:shiok_jobs_flutter/View/email_verification_page.dart';
+import 'package:shiok_jobs_flutter/View/email_verification_view.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -79,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     case Status.LOADING:
                       return const Center(child: CircularProgressIndicator());
                     case Status.COMPLETED:
-                      routeToEmailVerificationPage();
+                      routeToEmailVerificationView();
                     case Status.ERROR:
                       showSnackBar(
                           message: snapshot.data?.message ?? 'Error Occurred');
@@ -102,12 +102,12 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  routeToEmailVerificationPage() {
+  routeToEmailVerificationView() {
     return WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EmailVerificationPage(
+            builder: (context) => EmailVerificationView(
                   userName: userNameController.text,
                 )),
       );

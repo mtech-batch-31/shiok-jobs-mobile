@@ -4,18 +4,18 @@ import 'package:otp_text_field/style.dart';
 import 'package:shiok_jobs_flutter/Bloc/confirm_sign_up_bloc.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/confirm_sign_up_response.dart';
-import 'package:shiok_jobs_flutter/View/home_page.dart';
+import 'package:shiok_jobs_flutter/View/home_view.dart';
 
-class EmailVerificationPage extends StatefulWidget {
-  const EmailVerificationPage({required this.userName, super.key});
+class EmailVerificationView extends StatefulWidget {
+  const EmailVerificationView({required this.userName, super.key});
 
   final String userName;
 
   @override
-  State<StatefulWidget> createState() => _EmailVerificationPageState();
+  State<StatefulWidget> createState() => _EmailVerificationViewState();
 }
 
-class _EmailVerificationPageState extends State<EmailVerificationPage> {
+class _EmailVerificationViewState extends State<EmailVerificationView> {
   late ConfirmSignUpBloc confirmSignUpBloc;
 
   @override

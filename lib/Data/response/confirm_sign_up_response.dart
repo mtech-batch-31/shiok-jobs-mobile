@@ -1,6 +1,4 @@
-import 'package:shiok_jobs_flutter/Data/response/error_response.dart';
-
-class ConfirmSignUpResponse extends ErrorResponse {
+class ConfirmSignUpResponse {
   final ResponseMetadata? responseMetadata;
   final int? contentLength;
   final int? httpStatusCode;
