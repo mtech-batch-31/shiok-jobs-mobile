@@ -16,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   var errorMessage = '';
 
-  SignUpBloc _signUpBloc = SignUpBloc();
+  final _signUpBloc = SignUpBloc();
 
   @override
   @override
