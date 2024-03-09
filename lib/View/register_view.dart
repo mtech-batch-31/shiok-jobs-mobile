@@ -76,11 +76,11 @@ class _RegisterPageState extends State<RegisterPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data != null) {
                   switch (snapshot.data?.status) {
-                    case Status.LOADING:
+                    case Status.loading:
                       return const Center(child: CircularProgressIndicator());
-                    case Status.COMPLETED:
+                    case Status.completed:
                       routeToEmailVerificationView();
-                    case Status.ERROR:
+                    case Status.error:
                       showSnackBar(
                           message: snapshot.data?.message ?? 'Error Occurred');
                     case null:
