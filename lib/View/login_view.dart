@@ -41,11 +41,11 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             switch (snapshot.data?.status) {
-              case Status.LOADING:
+              case Status.loading:
                 const CircularProgressIndicator();
-              case Status.COMPLETED:
+              case Status.completed:
                 routeToHomePage();
-              case Status.ERROR:
+              case Status.error:
                 showSnackBar(
                     message:
                         snapshot.data?.message.toString() ?? 'error occurred');

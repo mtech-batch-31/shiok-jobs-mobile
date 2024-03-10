@@ -58,11 +58,11 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   switch (snapshot.data?.status) {
-                    case Status.LOADING:
+                    case Status.loading:
                       const Center(child: CircularProgressIndicator());
-                    case Status.COMPLETED:
+                    case Status.completed:
                       routeToHomePage();
-                    case Status.ERROR:
+                    case Status.error:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         showSnackBar(
                             message:
