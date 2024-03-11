@@ -10,9 +10,8 @@ class SignUpRepository {
   final apiURL = dotenv.env['API_URL'];
 
   Future<CodeDeliveryResponse> signUp(
-      {required userName, required password, required email}) async {
+      {required password, required email}) async {
     final request = SignUpRequest(
-      username: userName,
       password: password,
       email: email,
     );
@@ -29,7 +28,7 @@ class SignUpRepository {
   Future<ConfirmSignUpResponse> sendEmailVerification(
       {required String user, required String pin}) async {
     // Send email verification
-    final request = ConfirmSignUpRequest(username: user, code: pin);
+    final request = ConfirmSignUpRequest(email: user, code: pin);
     final String confimSignUpURL = "$apiURL/auth/ConfirmSignup";
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.post(

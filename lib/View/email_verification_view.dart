@@ -80,7 +80,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
               onPressed: () {
                 // Send email verification
                 debugPrint('OTP: $pinEntered');
-                sendEmailVerification(user: widget.userName, pin: pinEntered);
+                sendEmailVerification(email: widget.userName, pin: pinEntered);
               },
               child: const Text('Verify Email'),
             ),
@@ -90,8 +90,8 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
     );
   }
 
-  sendEmailVerification({required String user, required String pin}) async {
-    await confirmSignUpBloc.sendEmailVerification(user: user, pin: pin);
+  sendEmailVerification({required String email, required String pin}) async {
+    await confirmSignUpBloc.sendEmailVerification(email: email, pin: pin);
   }
 
   showSnackBar({required String message}) {

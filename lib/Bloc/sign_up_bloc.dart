@@ -14,14 +14,11 @@ class SignUpBloc {
     return _signUpController.stream;
   }
 
-  signUp(
-      {required String user,
-      required String password,
-      required String email}) async {
+  signUp({required String password, required String email}) async {
     signUpSink.add(ApiResponse.loading('Signing Up'));
     try {
-      CodeDeliveryResponse response = await _signUpRepository.signUp(
-          userName: user, password: password, email: email);
+      CodeDeliveryResponse response =
+          await _signUpRepository.signUp(password: password, email: email);
       signUpSink.add(ApiResponse.completed(response));
     } catch (e) {
       signUpSink.add(ApiResponse.error(e.toString()));

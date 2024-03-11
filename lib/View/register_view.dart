@@ -11,7 +11,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final userNameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   var errorMessage = '';
@@ -21,7 +20,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   @override
   void dispose() {
-    userNameController.dispose();
     passwordController.dispose();
     emailController.dispose();
     _signUpBloc.dispose();
@@ -44,13 +42,6 @@ class _RegisterPageState extends State<RegisterPage> {
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          TextField(
-            controller: userNameController,
-            decoration: const InputDecoration(
-              labelText: 'Username',
-            ),
-          ),
-          const SizedBox(height: 16),
           TextField(
             controller: emailController,
             decoration: const InputDecoration(
@@ -93,12 +84,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void textFieldValidation() {
-    if (userNameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       _signUpBloc.signUp(
-          user: userNameController.text,
-          password: passwordController.text,
-          email: emailController.text);
+          password: passwordController.text, email: emailController.text);
     }
   }
 
@@ -108,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
         context,
         MaterialPageRoute(
             builder: (context) => EmailVerificationView(
-                  userName: userNameController.text,
+                  userName: emailController.text,
                 )),
       );
     });
