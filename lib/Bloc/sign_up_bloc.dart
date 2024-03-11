@@ -15,13 +15,12 @@ class SignUpBloc {
   }
 
   signUp(
-      {required String user,
-      required String password,
+      {required String password,
       required String email}) async {
     signUpSink.add(ApiResponse.loading('Signing Up'));
     try {
       CodeDeliveryResponse response = await _signUpRepository.signUp(
-          userName: user, password: password, email: email);
+           password: password, email: email);
       signUpSink.add(ApiResponse.completed(response));
     } catch (e) {
       signUpSink.add(ApiResponse.error(e.toString()));

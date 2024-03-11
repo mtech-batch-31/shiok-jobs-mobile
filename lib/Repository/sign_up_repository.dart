@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shiok_jobs_flutter/NetworkClient/network_client.dart';
 import 'package:shiok_jobs_flutter/Data/request/confirm_sign_up_request.dart';
@@ -10,9 +11,8 @@ class SignUpRepository {
   final apiURL = dotenv.env['API_URL'];
 
   Future<CodeDeliveryResponse> signUp(
-      {required userName, required password, required email}) async {
+      {required password, required email}) async {
     final request = SignUpRequest(
-      username: userName,
       password: password,
       email: email,
     );
@@ -27,10 +27,10 @@ class SignUpRepository {
   }
 
   Future<ConfirmSignUpResponse> sendEmailVerification(
-      {required String user, required String pin}) async {
+      {required String email, required String pin}) async {
     // Send email verification
-    final request = ConfirmSignUpRequest(username: user, code: pin);
-    final String confimSignUpURL = "$apiURL/auth/ConfirmSignup";
+    final request = ConfirmSignUpRequest(email: email, code: pin);
+    final String confimSignUpURL = "$apiURL/auth/confirmsignup";
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.post(
       confimSignUpURL,

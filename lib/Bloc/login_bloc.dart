@@ -11,7 +11,7 @@ class LoginBloc {
   final _loginController = StreamController<ApiResponse<LoginResponse>>();
   final _loginRepository = LoginRepository();
 
-  Stream<String> get email => _userController.stream.transform(validateUser);
+  Stream<String> get email => _userController.stream.transform(validateEmail);
   Stream<String> get password =>
       _passwordController.stream.transform(validatePassword);
   Stream<ApiResponse<LoginResponse>> get login => _loginController.stream;
@@ -22,12 +22,13 @@ class LoginBloc {
   Function(String) get changeUser => _userController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
 
-  final validateUser =
+  final validateEmail =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
-    if (email.length > 3) {
+    final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (emailRegex.hasMatch(email)) {
       sink.add(email);
     } else {
-      sink.addError('Username must be at least 4 characters');
+      sink.addError('Email invalid');
     }
   });
 
