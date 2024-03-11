@@ -8,10 +8,10 @@ class LoginRepository {
   final apiURL = dotenv.env['API_URL'];
 
   Future<LoginResponse> login(
-      {required String userName, required String password}) async {
+      {required String email, required String password}) async {
     final loginApiEndPoint = '$apiURL/auth/login';
     _networkClient.setHeaders({'Content-Type': 'application/json'});
-    final request = LoginRequest(username: userName, password: password);
+    final request = LoginRequest(email: email, password: password);
     final response = await _networkClient.post(
       loginApiEndPoint,
       body: request.toJson(),

@@ -11,21 +11,21 @@ class LoginBloc {
   final _loginController = StreamController<ApiResponse<LoginResponse>>();
   final _loginRepository = LoginRepository();
 
-  Stream<String> get user => _userController.stream.transform(validateUser);
+  Stream<String> get email => _userController.stream.transform(validateUser);
   Stream<String> get password =>
       _passwordController.stream.transform(validatePassword);
   Stream<ApiResponse<LoginResponse>> get login => _loginController.stream;
 
   Stream<bool> get submitValid =>
-      Rx.combineLatest2(user, password, (a, b) => true);
+      Rx.combineLatest2(email, password, (a, b) => true);
 
   Function(String) get changeUser => _userController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
 
   final validateUser =
-      StreamTransformer<String, String>.fromHandlers(handleData: (user, sink) {
-    if (user.length > 3) {
-      sink.add(user);
+      StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
+    if (email.length > 3) {
+      sink.add(email);
     } else {
       sink.addError('Username must be at least 4 characters');
     }
@@ -41,11 +41,11 @@ class LoginBloc {
   });
 
   loginAuthenticate({
-    required String user,
+    required String email,
     required String password,
   }) {
-    debugPrint('user: $user, Password: $password');
-    _loginRepository.login(userName: user, password: password).then((response) {
+    debugPrint('email: $email, Password: $password');
+    _loginRepository.login(email: email, password: password).then((response) {
       _loginController.sink.add(ApiResponse.completed(response));
     }).catchError((error) {
       _loginController.sink.add(ApiResponse.error(error.toString()));
