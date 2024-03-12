@@ -34,7 +34,8 @@ class LoginBloc {
 
   final validatePassword = StreamTransformer<String, String>.fromHandlers(
       handleData: (password, sink) {
-    if (password.length > 3) {
+    final RegExp passwordRegex = RegExp(r'^[A-Za-z0-9!@#$%^&*-]{12,}$');
+    if (passwordRegex.hasMatch(password)) {
       sink.add(password);
     } else {
       sink.addError('Password must be at least 4 characters');
