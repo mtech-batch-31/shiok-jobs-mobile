@@ -17,9 +17,21 @@ class LoginResponse {
     return LoginResponse(
       sessionId: json['sessionId'],
       challengeName: json['challengeName'],
-      authenticationResult: json['authenticationResult'],
-      challengeParameters: json['challengeParameters'],
-      clientMetadata: json['clientMetadata'],
+      authenticationResult: json['authenticationResult'] != null
+          ? AuthenticationResult(
+              accessToken: json['authenticationResult']['accessToken'],
+              expiresIn: json['authenticationResult']['expiresIn'],
+              idToken: json['authenticationResult']['idToken'],
+              newDeviceMetadata: json['authenticationResult']
+                  ['newDeviceMetadata'],
+              refreshToken: json['authenticationResult']['refreshToken'],
+              tokenType: json['authenticationResult']['tokenType'],
+            )
+          : null,
+      challengeParameters:
+          json['challengeParameters'] != null ? ChallengeParameters() : null,
+      clientMetadata:
+          json['clientMetadata'] != null ? ChallengeParameters() : null,
     );
   }
 }
@@ -40,17 +52,6 @@ class AuthenticationResult {
     this.refreshToken,
     this.tokenType,
   });
-
-  toJson() {
-    return {
-      'accessToken': accessToken,
-      'expiresIn': expiresIn,
-      'idToken': idToken,
-      'newDeviceMetadata': newDeviceMetadata,
-      'refreshToken': refreshToken,
-      'tokenType': tokenType,
-    };
-  }
 }
 
 class ChallengeParameters {

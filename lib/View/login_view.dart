@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
         controller: userController,
         decoration: const InputDecoration(
-          labelText: 'Username',
+          labelText: 'Email',
         ));
   }
 
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void postLoginAPI() {
     _loginBloc.loginAuthenticate(
-      user: userController.text,
+      email: userController.text,
       password: passwordController.text,
     );
   }
