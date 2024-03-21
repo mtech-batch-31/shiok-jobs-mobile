@@ -46,12 +46,16 @@ class LoginBloc {
     required String email,
     required String password,
   }) {
-    debugPrint('email: $email, Password: $password');
-    _loginRepository.login(email: email, password: password).then((response) {
-      _loginController.sink.add(ApiResponse.completed(response));
-    }).catchError((error) {
-      _loginController.sink.add(ApiResponse.error(error.toString()));
-    });
+    try {
+      _loginController.sink.add(ApiResponse.loading('Logging In'));
+      _loginRepository.login(email: email, password: password).then((response) {
+        _loginController.sink.add(ApiResponse.completed(response));
+      }).catchError((error) {
+        _loginController.sink.add(ApiResponse.error(error.toString()));
+      });
+    } catch (e) {
+      _loginController.sink.add(ApiResponse.error(e.toString()));
+    }
   }
 
   dispose() {

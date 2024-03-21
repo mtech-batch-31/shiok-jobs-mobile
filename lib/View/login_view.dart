@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           if (snapshot.hasData && snapshot.data != null) {
             switch (snapshot.data?.status) {
               case Status.loading:
-                const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               case Status.completed:
                 routeToHomePage();
               case Status.error:

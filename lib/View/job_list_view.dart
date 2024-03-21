@@ -1,9 +1,11 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shiok_jobs_flutter/Data/response/job_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
 import 'package:shiok_jobs_flutter/View/job_detail_view.dart';
+import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 class JobList extends StatefulWidget {
   const JobList({super.key});
@@ -12,35 +14,34 @@ class JobList extends StatefulWidget {
 }
 
 class _JobListState extends State<JobList> {
-  List<Job> jobList = [];
-  List<Job> filteredJobList = [];
-
-  Future<void> getJobs() async {
-    final String response =
-        await rootBundle.loadString('assets/json/jobs.json');
-
-    final List<dynamic> data = json.decode(response);
-    final List<Job> jobs =
-        data.map((dynamic item) => Job.fromJson(item)).toList();
-    setState(() {
-      debugPrint(jobs.toString());
-      jobList = jobs;
-      filteredJobList = jobList;
-    });
-  }
+  List<JobSummary> jobList = [];
+  final _jobSummaryBloc = JobListingBloc();
+  final _textSubject = BehaviorSubject<String>();
+  StreamSubscription<String>? _subscription;
 
   @override
   void initState() {
     super.initState();
-    getJobs();
-    filteredJobList = jobList;
+    _jobSummaryBloc.getAllJobList();
+    _subscription = _textSubject
+        .debounceTime(const Duration(milliseconds: 500))
+        .listen((String value) {
+      _jobSummaryBloc.getJobListByKeyword(value);
+    });
+  }
+
+  @override
+  void dispose() {
+    _jobSummaryBloc.dispose();
+    _subscription?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Job List'),
+        title: const Text('JobSummary List'),
       ),
       body: Column(
         children: <Widget>[
@@ -48,13 +49,35 @@ class _JobListState extends State<JobList> {
             padding: const EdgeInsets.all(8.0),
             child: Card(child: searchTextField()),
           ),
-          Expanded(
-            child: filteredJobList.isEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : listViewBuilder(),
-          ),
+          // Expanded(
+          //   child: jobList.isEmpty
+          //       ? const Center(
+          //           child: CircularProgressIndicator(),
+          //         )
+          //       : listViewBuilder(),
+          // ),
+          StreamBuilder(
+              stream: _jobSummaryBloc.jobListStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  switch (snapshot.data?.status) {
+                    case Status.loading:
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case Status.completed:
+                      if (snapshot.data?.data != null) {
+                        jobList = snapshot.data?.data as List<JobSummary>;
+                      }
+                      return listViewBuilder();
+                    case Status.error:
+                      showSnackBar(
+                          message: snapshot.data?.message ?? 'Error Occurred');
+                    case null:
+                  }
+                }
+                return Container();
+              }),
         ],
       ),
     );
@@ -71,35 +94,36 @@ class _JobListState extends State<JobList> {
         ),
       ),
       onChanged: (String value) {
-        setState(() {
-          filteredJobList = jobList
-              .where((Job job) =>
-                  job.jobTitle.toLowerCase().contains(value.toLowerCase()))
-              .toList();
-          debugPrint(filteredJobList.length.toString());
-          debugPrint(value.toString());
-        });
+        _textSubject.add(value);
       },
     );
   }
 
   ListView listViewBuilder() {
     return ListView.builder(
-      itemCount: filteredJobList.length,
+      shrinkWrap: true,
+      itemCount: jobList.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-            title: Text(
-                '${filteredJobList[index].jobTitle} - ${filteredJobList[index].level}'),
-            subtitle: Text('Company: ${filteredJobList[index].company}'),
+            title: Text('${jobList[index].jobTitle} - ${jobList[index].level}'),
+            subtitle: Text('Company: ${jobList[index].company}'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => JobDetail(job: filteredJobList[index]),
+                  builder: (context) => JobDetail(job: jobList[index]),
                 ),
               );
             });
       },
     );
+  }
+
+  showSnackBar({required String message}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    });
   }
 }
