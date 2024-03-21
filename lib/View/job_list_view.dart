@@ -111,7 +111,7 @@ class _JobListState extends State<JobList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => JobDetail(job: jobList[index]),
+                  builder: (context) => JobDetailView(jobId: index + 1),
                 ),
               );
             });

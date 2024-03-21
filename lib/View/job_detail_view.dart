@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
 
-class JobDetail extends StatelessWidget {
-  const JobDetail({required this.job, super.key});
+class JobDetailView extends StatefulWidget {
+  const JobDetailView({required this.jobId, super.key});
+  final int jobId;
 
-  final JobSummary job;
+  @override
+  State<StatefulWidget> createState() => _JobDetailViewState();
+}
+
+class _JobDetailViewState extends State<JobDetailView> {
+  final _jobSummaryBloc = JobListingBloc();
+
+  late int _jobId;
+
+  @override
+  initState() {
+    _jobId = widget.jobId;
+    debugPrint('Fetching Job Detail for $_jobId');
+    _jobSummaryBloc.getJobById(_jobId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +32,36 @@ class JobDetail extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text(job.company ?? ''),
-            Text(job.jobTitle ?? ''),
-            Text(job.level ?? ''),
-            Text(job.postedAt.toString() ?? ''),
-            Text(job.employmentType ?? ''),
-            Text(job.location ?? ''),
-            Text(job.skills.toString()),
+            StreamBuilder(
+                stream: _jobSummaryBloc.jobDetailStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    switch (snapshot.data?.status) {
+                      case Status.loading:
+                        return const Center(child: CircularProgressIndicator());
+                      case Status.completed:
+                        return Column(
+                          children: [
+                            Text(snapshot.data?.data?.lastUpdatedTime
+                                    .toString() ??
+                                ''),
+                            Text(snapshot.data?.data?.closingDate.toString() ??
+                                ''),
+                            Text(snapshot.data?.data?.location ?? ''),
+                            Text(snapshot.data?.data?.companyName ?? ''),
+                            Text(snapshot.data?.data?.postedDate.toString() ??
+                                ''),
+                            Text(snapshot.data?.data?.jobTitle ?? ''),
+                            Text(snapshot.data?.data?.skills.toString() ?? ''),
+                          ],
+                        );
+                      case Status.error:
+                        return Text(snapshot.data?.message.toString() ?? '');
+                      case null:
+                    }
+                  }
+                  return const SizedBox();
+                }),
             const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {

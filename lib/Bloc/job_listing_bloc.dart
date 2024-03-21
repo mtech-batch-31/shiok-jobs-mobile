@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/Repository/job_respository.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
 
@@ -10,6 +11,11 @@ class JobListingBloc {
 
   Stream<ApiResponse<List<JobSummary>>> get jobListStream {
     return _jobListController.stream;
+  }
+
+  final _jobDetailController = StreamController<ApiResponse<JobDetail>>();
+  Stream<ApiResponse<JobDetail>> get jobDetailStream {
+    return _jobDetailController.stream;
   }
 
   getAllJobList() async {
@@ -35,8 +41,18 @@ class JobListingBloc {
     }
   }
 
+  getJobById(int id) async {
+    try {
+      _jobDetailController.sink.add(ApiResponse.loading('Fetching Job'));
+      JobDetail job = await _jobRepository.getJobById(id);
+      _jobDetailController.sink.add(ApiResponse.completed(job));
+    } catch (e) {
+      _jobDetailController.sink.add(ApiResponse.error(e.toString()));
+    }
+  }
+
   dispose() {
     _jobListController.close();
-    _jobListController.sink.close();
+    _jobDetailController.close();
   }
 }

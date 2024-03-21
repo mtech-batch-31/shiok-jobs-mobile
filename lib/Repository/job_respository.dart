@@ -6,11 +6,10 @@ import 'package:shiok_jobs_flutter/NetworkClient/network_client.dart';
 
 class JobRepository {
   final NetworkClient _networkClient = NetworkClient();
-  final apiURL = dotenv.env['API_URL'];
+  final apiURL = dotenv.env['API_JOBS'];
 
   Future<List<JobSummary>?> getAllJobs() async {
-    // final jobApiEndPoint = '$apiURL/jobs/all';
-    const jobApiEndPoint = 'http://localhost:8080/v1/jobs/all';
+    final jobApiEndPoint = '$apiURL/jobs/all';
     debugPrint('Fetching all Jobs from $jobApiEndPoint');
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
@@ -20,8 +19,7 @@ class JobRepository {
   }
 
   Future<List<JobSummary>?> getJobsByKeyword(String keyword) async {
-    // final jobApiEndPoint = '$apiURL/jobs?keywords=$keyword';
-    final jobApiEndPoint = 'http://localhost:8080/v1/jobs?keywords=$keyword';
+    final jobApiEndPoint = '$apiURL/jobs?keywords=$keyword';
     debugPrint('Fetching Jobs based on keywords from $jobApiEndPoint');
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
@@ -30,12 +28,12 @@ class JobRepository {
     return JobsListingResponse.fromJson(response).data;
   }
 
-  Future<JobDetailResponse> getJobById(int id) async {
+  Future<JobDetail> getJobById(int id) async {
     final jobApiEndPoint = '$apiURL/jobs/$id';
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
       jobApiEndPoint,
     );
-    return JobDetailResponse.fromJson(response);
+    return JobDetail.fromJson(response);
   }
 }

@@ -1,4 +1,4 @@
-class JobDetailResponse {
+class JobDetail {
   final int? id;
   final int? companyId;
   final String? companyName;
@@ -10,8 +10,8 @@ class JobDetailResponse {
   final String? employmentType;
   final String? location;
   final String? workHours;
-  final int? minSalary;
-  final int? maxSalary;
+  final double? minSalary;
+  final double? maxSalary;
   final int? postedDate;
   final int? closingDate;
   final int? version;
@@ -21,7 +21,7 @@ class JobDetailResponse {
   final int? createdTime;
   final dynamic applied;
 
-  JobDetailResponse({
+  JobDetail({
     this.id,
     this.companyId,
     this.companyName,
@@ -45,8 +45,8 @@ class JobDetailResponse {
     this.applied,
   });
 
-  factory JobDetailResponse.fromJson(Map<String, dynamic> json) {
-    return JobDetailResponse(
+  factory JobDetail.fromJson(Map<String, dynamic> json) {
+    return JobDetail(
       id: json['id'],
       companyId: json['companyId'],
       companyName: json['companyName'],
