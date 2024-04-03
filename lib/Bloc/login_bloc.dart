@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/login_response.dart';
 import 'package:shiok_jobs_flutter/Repository/login_repository.dart';
+import 'package:shiok_jobs_flutter/Storage/secure_storage.dart';
 
 class LoginBloc {
   final _userController = StreamController<String>();
@@ -50,6 +50,9 @@ class LoginBloc {
       _loginController.sink.add(ApiResponse.loading('Logging In'));
       _loginRepository.login(email: email, password: password).then((response) {
         _loginController.sink.add(ApiResponse.completed(response));
+        if (response.authenticationResult?.accessToken != null) {
+          writeAccessToken(response.authenticationResult?.accessToken ?? '');
+        }
       }).catchError((error) {
         _loginController.sink.add(ApiResponse.error(error.toString()));
       });

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shiok_jobs_flutter/NetworkClient/app_excepton.dart';
+import 'package:shiok_jobs_flutter/Storage/secure_storage.dart';
 
 class NetworkClient {
   static final NetworkClient _instance = NetworkClient._internal();

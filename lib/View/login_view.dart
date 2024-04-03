@@ -96,22 +96,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextField passwordTextField() {
-    return TextField(
-      controller: passwordController,
-      decoration: const InputDecoration(
-        labelText: 'Password',
-      ),
-      obscureText: true,
-    );
+  Widget passwordTextField() {
+    return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: TextField(
+          controller: passwordController,
+          decoration: const InputDecoration(
+            labelText: 'Password',
+          ),
+          obscureText: true,
+        ));
   }
 
-  TextField userTextField() {
-    return TextField(
-        controller: userController,
-        decoration: const InputDecoration(
-          labelText: 'Email',
-        ));
+  Widget userTextField() {
+    return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: TextField(
+            controller: userController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            )));
   }
 
   showSnackBar({required String message}) {

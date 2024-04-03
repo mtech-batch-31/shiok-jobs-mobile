@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
+import 'package:shiok_jobs_flutter/View/job_apply_view.dart';
 
 class JobDetailView extends StatefulWidget {
   const JobDetailView({required this.jobId, super.key});
@@ -65,12 +66,21 @@ class _JobDetailViewState extends State<JobDetailView> {
             const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
-                  debugPrint('Apply for job');
+                  routeToHomePage();
                 },
                 child: const Text('Apply'))
           ],
         ),
       ),
     );
+  }
+
+  routeToHomePage() {
+    return WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => JobApplyView(jobId: _jobId)),
+      );
+    });
   }
 }

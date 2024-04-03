@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_apply_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/Repository/job_respository.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
 
 class JobListingBloc {
   final JobRepository _jobRepository = JobRepository();
-  final _jobListController = StreamController<ApiResponse<List<JobSummary>>>();
 
+  final _jobListController = StreamController<ApiResponse<List<JobSummary>>>();
   Stream<ApiResponse<List<JobSummary>>> get jobListStream {
     return _jobListController.stream;
   }
@@ -16,6 +17,11 @@ class JobListingBloc {
   final _jobDetailController = StreamController<ApiResponse<JobDetail>>();
   Stream<ApiResponse<JobDetail>> get jobDetailStream {
     return _jobDetailController.stream;
+  }
+
+  final _jobApplyController = StreamController<ApiResponse<JobApplyResponse>>();
+  Stream<ApiResponse<JobApplyResponse>> get jobApplyStream {
+    return _jobApplyController.stream;
   }
 
   getAllJobList() async {
@@ -51,8 +57,20 @@ class JobListingBloc {
     }
   }
 
+  applyJob(int id) async {
+    try {
+      _jobApplyController.sink
+          .add(ApiResponse.loading('Applying Job In Progress'));
+      JobApplyResponse jobResponse = await _jobRepository.applyJob(id);
+      _jobApplyController.sink.add(ApiResponse.completed(jobResponse));
+    } catch (e) {
+      _jobDetailController.sink.add(ApiResponse.error(e.toString()));
+    }
+  }
+
   dispose() {
     _jobListController.close();
     _jobDetailController.close();
+    _jobApplyController.close();
   }
 }
