@@ -1,8 +1,10 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/View/home_view.dart';
 import 'package:shiok_jobs_flutter/View/register_view.dart';
 import 'package:shiok_jobs_flutter/Bloc/login_bloc.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -89,7 +91,10 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: routeToRegisterPage,
               child: const Text('Register'),
-            )
+            ),
+            ElevatedButton(
+                onPressed: socialSignIn,
+                child: const Text('Sign in with Google'))
           ],
         ),
       ),
@@ -151,5 +156,65 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (context) => const RegisterPage()),
       );
     });
+  }
+
+  Future<void> socialSignIn() async {
+    try {
+      final result = await Amplify.Auth.signInWithWebUI(
+        options: const SignInWithWebUIOptions(
+            pluginOptions: CognitoSignInWithWebUIPluginOptions(
+          isPreferPrivateSession: false,
+        )),
+        provider: AuthProvider.google,
+      );
+      safePrint('Sign in result: $result');
+      _handleSignInResult(result);
+    } on AuthException catch (e) {
+      showSnackBar(message: e.message);
+    }
+  }
+
+  Future<void> _handleSignInResult(SignInResult result) async {
+    switch (result.nextStep.signInStep) {
+      case AuthSignInStep.continueSignInWithMfaSelection:
+      // Handle select from MFA methods case
+      case AuthSignInStep.continueSignInWithTotpSetup:
+      // Handle TOTP setup case
+      case AuthSignInStep.confirmSignInWithTotpMfaCode:
+      // Handle TOTP MFA case
+      case AuthSignInStep.confirmSignInWithSmsMfaCode:
+      // Handle SMS MFA case
+      case AuthSignInStep.confirmSignInWithNewPassword:
+      // Handle new password case
+      case AuthSignInStep.confirmSignInWithCustomChallenge:
+      // Handle custom challenge case
+      case AuthSignInStep.resetPassword:
+      // Handle reset password case
+      case AuthSignInStep.confirmSignUp:
+      // Handle confirm sign up case
+      case AuthSignInStep.done:
+        safePrint('Sign in is complete');
+        getAccessToken();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+    }
+  }
+
+  void getAccessToken() async {
+    try {
+      final cognitoPlugin =
+          Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
+      final result = await cognitoPlugin.fetchAuthSession();
+      final accessToken = result.userPoolTokens?.accessToken.raw;
+      final idToken = result.userPoolTokens?.idToken.raw;
+      safePrint('Access token: $accessToken');
+      safePrint('ID token: $idToken');
+      final identityId = result.identityIdResult.value;
+      safePrint("Current user's identity ID: $identityId");
+    } on AuthException catch (e) {
+      safePrint('Error retrieving auth session: ${e.message}');
+    }
   }
 }
