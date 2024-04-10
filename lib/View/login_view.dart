@@ -1,5 +1,6 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:shiok_jobs_flutter/Bloc/token_bloc.dart';
 import 'package:shiok_jobs_flutter/View/home_view.dart';
 import 'package:shiok_jobs_flutter/View/register_view.dart';
 import 'package:shiok_jobs_flutter/Bloc/login_bloc.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               case Status.loading:
                 return const Center(child: CircularProgressIndicator());
               case Status.completed:
+                TokenBloc().setSignInFlow(SignInFlow.email);
                 routeToHomePage();
               case Status.error:
                 showSnackBar(
@@ -194,27 +196,11 @@ class _LoginPageState extends State<LoginPage> {
       // Handle confirm sign up case
       case AuthSignInStep.done:
         safePrint('Sign in is complete');
-        getAccessToken();
+        TokenBloc().setSignInFlow(SignInFlow.google);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
-    }
-  }
-
-  void getAccessToken() async {
-    try {
-      final cognitoPlugin =
-          Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
-      final result = await cognitoPlugin.fetchAuthSession();
-      final accessToken = result.userPoolTokens?.accessToken.raw;
-      final idToken = result.userPoolTokens?.idToken.raw;
-      safePrint('Access token: $accessToken');
-      safePrint('ID token: $idToken');
-      final identityId = result.identityIdResult.value;
-      safePrint("Current user's identity ID: $identityId");
-    } on AuthException catch (e) {
-      safePrint('Error retrieving auth session: ${e.message}');
     }
   }
 }

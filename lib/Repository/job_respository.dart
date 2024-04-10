@@ -5,7 +5,6 @@ import 'package:shiok_jobs_flutter/Data/response/job_apply_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
 import 'package:shiok_jobs_flutter/NetworkClient/network_client.dart';
-import 'package:shiok_jobs_flutter/Storage/secure_storage.dart';
 
 class JobRepository {
   final NetworkClient _networkClient = NetworkClient();
@@ -41,24 +40,16 @@ class JobRepository {
     return JobDetail.fromJson(response);
   }
 
-  Future<JobApplyResponse> applyJob(int id) async {
+  Future<JobApplyResponse> applyJob(int id, String token) async {
     final jobApiEndPoint = '$apiURL/jobs/apply';
+    final bearerToken = token;
     _networkClient.setHeaders({'Content-Type': 'application/json'});
-    final bearerToken = await getAccessToken();
-    if (bearerToken == null) {
-      throw Exception('Bearer token is null');
-    } else {
-      _networkClient.setHeaders({'Authorization': 'Bearer $bearerToken'});
-    }
+    _networkClient.setHeaders({'Authorization': 'Bearer $bearerToken'});
     final request = JobApplyRequest(id: id);
     final response = await _networkClient.post(
       jobApiEndPoint,
       body: request.toJson(),
     );
     return JobApplyResponse.fromJson(response);
-  }
-
-  Future<String?> getAccessToken() async {
-    return readAccessToken();
   }
 }

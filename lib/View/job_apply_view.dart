@@ -19,7 +19,7 @@ class _JobApplyViewState extends State<JobApplyView> {
   initState() {
     _jobId = widget.jobId;
     debugPrint('Applying Job for $_jobId');
-    _jobApplyBloc.applyJob(_jobId);
+    applyJob();
     super.initState();
   }
 
@@ -75,6 +75,10 @@ class _JobApplyViewState extends State<JobApplyView> {
         ),
       ),
     );
+  }
+
+  void applyJob() async {
+    _jobApplyBloc.applyJob(_jobId);
   }
 
   showSnackBar({required String message}) {

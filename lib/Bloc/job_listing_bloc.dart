@@ -5,6 +5,7 @@ import 'package:shiok_jobs_flutter/Data/response/job_apply_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/Repository/job_respository.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
+import 'package:shiok_jobs_flutter/Bloc/token_bloc.dart';
 
 class JobListingBloc {
   final JobRepository _jobRepository = JobRepository();
@@ -61,7 +62,8 @@ class JobListingBloc {
     try {
       _jobApplyController.sink
           .add(ApiResponse.loading('Applying Job In Progress'));
-      JobApplyResponse jobResponse = await _jobRepository.applyJob(id);
+      final token = await TokenBloc().getToken();
+      JobApplyResponse jobResponse = await _jobRepository.applyJob(id, token);
       _jobApplyController.sink.add(ApiResponse.completed(jobResponse));
     } catch (e) {
       _jobDetailController.sink.add(ApiResponse.error(e.toString()));
