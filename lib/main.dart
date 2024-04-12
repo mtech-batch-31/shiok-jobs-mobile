@@ -6,6 +6,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:shiok_jobs_flutter/View/home_view.dart';
 import 'package:shiok_jobs_flutter/View/register_view.dart';
+import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'env/dev.env');
@@ -24,10 +25,13 @@ class MyApp extends StatefulWidget {
 // With Flutter, you create user interfaces by combining "widgets"
 // You'll learn all about them (and much more) throughout this course!
 class _MyAppState extends State<MyApp> {
+  bool _jailbroken = false;
+
   @override
   void initState() {
     super.initState();
     _configureAmplify();
+    _checkJailbreak();
   }
 
   // Every custom widget must have a build() method
@@ -39,6 +43,15 @@ class _MyAppState extends State<MyApp> {
     // They will be explained in the next sections
     // In this course, you will, of course, not just use them a lot but
     // also learn about many other widgets!
+    var scaffoldDisplay = Scaffold(
+      body: _jailbroken
+          ? const Center(
+              child: Text('Jailbroken device detected'),
+            )
+          : const LoginPage(),
+      backgroundColor: Colors.indigo[50],
+    );
+
     return MaterialApp(
         title: 'Job Search App',
         theme: ThemeData(useMaterial3: true),
@@ -47,10 +60,7 @@ class _MyAppState extends State<MyApp> {
           '/home': (context) => const HomePage(),
           '/register': (context) => const RegisterPage(),
         },
-        home: Scaffold(
-          body: const LoginPage(),
-          backgroundColor: Colors.indigo[50],
-        ));
+        home: scaffoldDisplay);
   }
 
   Future<void> _configureAmplify() async {
@@ -63,5 +73,14 @@ class _MyAppState extends State<MyApp> {
     } on Exception catch (e) {
       safePrint('An error occurred configuring Amplify: $e');
     }
+  }
+
+  _checkJailbreak() async {
+    bool jail = await FlutterJailbreakDetection.jailbroken;
+    bool developerMode =
+        await FlutterJailbreakDetection.developerMode; // android only.
+    setState(() {
+      _jailbroken = jail || developerMode;
+    });
   }
 }

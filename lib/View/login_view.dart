@@ -160,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  //Move this to _loginBloc
   Future<void> socialSignIn() async {
     try {
       final result = await Amplify.Auth.signInWithWebUI(
