@@ -12,13 +12,13 @@ class JobDetail {
   final String? workHours;
   final double? minSalary;
   final double? maxSalary;
-  final int? postedDate;
-  final int? closingDate;
+  final DateTime? postedDate;
+  final DateTime? closingDate;
   final int? version;
   final String? lastUpdatedBy;
-  final int? lastUpdatedTime;
+  final DateTime? lastUpdatedTime;
   final String? createdBy;
-  final int? createdTime;
+  final DateTime? createdTime;
   final dynamic applied;
 
   JobDetail({
@@ -60,13 +60,14 @@ class JobDetail {
       workHours: json['workHours'],
       minSalary: json['minSalary'],
       maxSalary: json['maxSalary'],
-      postedDate: json['postedDate'],
-      closingDate: json['closingDate'],
+      postedDate: DateTime.fromMillisecondsSinceEpoch(json['postedDate']),
+      closingDate: DateTime.fromMillisecondsSinceEpoch(json['closingDate']),
       version: json['version'],
       lastUpdatedBy: json['lastUpdatedBy'],
-      lastUpdatedTime: json['lastUpdatedTime'],
+      lastUpdatedTime:
+          DateTime.fromMillisecondsSinceEpoch(json['lastUpdatedTime']),
       createdBy: json['createdBy'],
-      createdTime: json['createdTime'],
+      createdTime: DateTime.fromMillisecondsSinceEpoch(json['createdTime']),
       applied: json['applied'],
     );
   }

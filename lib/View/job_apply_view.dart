@@ -75,9 +75,13 @@ class _JobApplyViewState extends State<JobApplyView> {
           width: 100,
           fit: BoxFit.cover,
         ),
-        const SizedBox(),
+        const SizedBox(
+          height: 16,
+        ),
         const Text('Job Applied Successfully'),
-        const SizedBox(),
+        const SizedBox(
+          height: 50,
+        ),
         ElevatedButton(
           onPressed: () {
             Navigator.popUntil(context, ModalRoute.withName('/home'));

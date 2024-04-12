@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
+import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/View/job_apply_view.dart';
 
 class JobDetailView extends StatefulWidget {
@@ -31,7 +33,6 @@ class _JobDetailViewState extends State<JobDetailView> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StreamBuilder(
                 stream: _jobSummaryBloc.jobDetailStream,
@@ -43,17 +44,7 @@ class _JobDetailViewState extends State<JobDetailView> {
                       case Status.completed:
                         return Column(
                           children: [
-                            Text(snapshot.data?.data?.lastUpdatedTime
-                                    .toString() ??
-                                ''),
-                            Text(snapshot.data?.data?.closingDate.toString() ??
-                                ''),
-                            Text(snapshot.data?.data?.location ?? ''),
-                            Text(snapshot.data?.data?.companyName ?? ''),
-                            Text(snapshot.data?.data?.postedDate.toString() ??
-                                ''),
-                            Text(snapshot.data?.data?.jobTitle ?? ''),
-                            Text(snapshot.data?.data?.skills.toString() ?? ''),
+                            showJobDetail(snapshot.data!.data as JobDetail),
                           ],
                         );
                       case Status.error:
@@ -75,6 +66,34 @@ class _JobDetailViewState extends State<JobDetailView> {
     );
   }
 
+  Widget showJobDetail(JobDetail job) {
+    return Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(job.jobTitle.toString(),
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold)),
+            Text("Company: ${job.companyName.toString()}"),
+            Text("Industry: ${job.jobCategory.toString()}"),
+            Text("Experience: ${job.level.toString()}"),
+            Text("Employment Type: ${job.employmentType.toString()}"),
+            const Text("Skills:"),
+            for (var skill in job.skills!)
+              Text(skill, style: const TextStyle(color: Colors.blueGrey)),
+            const Divider(thickness: 1, color: Colors.grey),
+            Text(job.jobSummary ?? ''),
+            const SizedBox(height: 50),
+            Text(
+                "Posted on ${DateFormat.yMMMMEEEEd().format(job.postedDate ?? DateTime.now())}",
+                style: const TextStyle(color: Colors.blue)),
+          ],
+        ));
+  }
+
   routeToHomePage() {
     return WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.push(
@@ -82,5 +101,11 @@ class _JobDetailViewState extends State<JobDetailView> {
         MaterialPageRoute(builder: (context) => JobApplyView(jobId: _jobId)),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    _jobSummaryBloc.dispose();
+    super.dispose();
   }
 }
