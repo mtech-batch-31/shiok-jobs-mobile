@@ -6,6 +6,7 @@ import 'package:shiok_jobs_flutter/Data/response/job_listing_response.dart';
 import 'package:shiok_jobs_flutter/View/job_detail_view.dart';
 import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shiok_jobs_flutter/View/logout_widget.dart';
 
 class JobList extends StatefulWidget {
   const JobList({super.key});
@@ -42,6 +43,7 @@ class _JobListState extends State<JobList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('JobSummary List'),
+        actions: [logoutIcon()],
       ),
       body: Column(
         children: <Widget>[

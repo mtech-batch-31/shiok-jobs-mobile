@@ -4,6 +4,7 @@ import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';
 import 'package:shiok_jobs_flutter/View/job_apply_view.dart';
+import 'package:shiok_jobs_flutter/View/logout_widget.dart';
 
 class JobDetailView extends StatefulWidget {
   const JobDetailView({required this.jobId, super.key});
@@ -30,6 +31,7 @@ class _JobDetailViewState extends State<JobDetailView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Job Detail'),
+        actions: [logoutIcon()],
       ),
       body: Center(
         child: Column(

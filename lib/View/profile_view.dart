@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shiok_jobs_flutter/View/logout_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,12 +12,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-        icon: const Icon(Icons.logout),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      )),
+        actions: [logoutIcon()],
+      ),
       body: const Center(
         child: Text('Profile Page'),
       ),

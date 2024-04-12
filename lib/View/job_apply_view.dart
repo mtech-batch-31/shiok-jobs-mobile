@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Bloc/job_listing_bloc.dart';
+import 'package:shiok_jobs_flutter/View/logout_widget.dart';
 
 class JobApplyView extends StatefulWidget {
   const JobApplyView({required this.jobId, super.key});
@@ -27,6 +28,7 @@ class _JobApplyViewState extends State<JobApplyView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Job Apply'),
+        actions: [logoutIcon()],
       ),
       body: Center(
         child: Column(
@@ -61,6 +63,12 @@ class _JobApplyViewState extends State<JobApplyView> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _jobApplyBloc.dispose();
+    super.dispose();
   }
 
   void applyJob() async {
