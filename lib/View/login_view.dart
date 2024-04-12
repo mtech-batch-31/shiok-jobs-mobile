@@ -144,10 +144,7 @@ class _LoginPageState extends State<LoginPage> {
 
   routeToHomePage() {
     return WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      Navigator.pushNamed(context, '/home');
     });
   }
 
