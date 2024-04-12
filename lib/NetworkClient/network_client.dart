@@ -40,10 +40,15 @@ class NetworkClient {
     if (body != null) {
       request.body = jsonEncode(body);
     }
-    // final streamedResponse = await http.Client().send(request);
-    final streamedResponse = await client.send(request);
-    final response = await http.Response.fromStream(streamedResponse);
-    return response;
+    switch (request.method) {
+      case 'GET':
+        return await client.get(request.url, headers: request.headers);
+      case 'POST':
+        return await client.post(request.url,
+            headers: request.headers, body: request.body);
+      default:
+        throw Exception('Method not supported');
+    }
   }
 
   SecureHttpClient getClient(List<String> allowedSHAFingerprints) {
