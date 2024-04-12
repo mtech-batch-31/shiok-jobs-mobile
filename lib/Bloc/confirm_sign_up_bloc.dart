@@ -23,7 +23,6 @@ class ConfirmSignUpBloc {
       signUpSink.add(ApiResponse.completed(response));
     } catch (e) {
       signUpSink.add(ApiResponse.error(e.toString()));
-      //debugPrint(g);
     }
   }
 

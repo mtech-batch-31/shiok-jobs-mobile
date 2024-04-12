@@ -19,7 +19,6 @@ class _JobDetailViewState extends State<JobDetailView> {
   @override
   initState() {
     _jobId = widget.jobId;
-    debugPrint('Fetching Job Detail for $_jobId');
     _jobSummaryBloc.getJobById(_jobId);
     super.initState();
   }

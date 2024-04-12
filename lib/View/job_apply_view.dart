@@ -18,7 +18,6 @@ class _JobApplyViewState extends State<JobApplyView> {
   @override
   initState() {
     _jobId = widget.jobId;
-    debugPrint('Applying Job for $_jobId');
     applyJob();
     super.initState();
   }
@@ -35,41 +34,27 @@ class _JobApplyViewState extends State<JobApplyView> {
             StreamBuilder(
                 stream: _jobApplyBloc.jobApplyStream,
                 builder: (context, snapshot) {
-                  Text('Applying Job for $_jobId');
                   if (snapshot.hasData && snapshot.data != null) {
                     switch (snapshot.data?.status) {
                       case Status.loading:
-                        const Center(child: CircularProgressIndicator());
-                      case Status.completed:
-                        return Column(
-                          children: [
-                            Text(snapshot.data?.data?.message.toString() ?? ''),
-                            if (snapshot.data?.data?.status == 'success')
-                              Image.asset(
-                                'assets/images/success.png',
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.contain,
-                              ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.popUntil(
-                                    context, (route) => route.isFirst);
-                              },
-                              child: const Text('Home'),
-                            )
-                          ],
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
+                      case Status.completed:
+                        return completedView();
                       case Status.error:
-                        showSnackBar(
+                        return showSnackBar(
                             message: snapshot.data?.message.toString() ?? '');
                       case null:
                         return const Text('No Data');
                       default:
                         return Container();
                     }
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-                  return Container();
                 }),
           ],
         ),
@@ -79,6 +64,20 @@ class _JobApplyViewState extends State<JobApplyView> {
 
   void applyJob() async {
     _jobApplyBloc.applyJob(_jobId);
+  }
+
+  Widget completedView() {
+    return Column(
+      children: [
+        const Text('Job Applied Successfully'),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.popUntil(context, ModalRoute.withName('/home'));
+          },
+          child: const Text('Home'),
+        )
+      ],
+    );
   }
 
   showSnackBar({required String message}) {

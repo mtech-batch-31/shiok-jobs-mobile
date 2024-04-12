@@ -18,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _signUpBloc = SignUpBloc();
 
   @override
-  @override
   void dispose() {
     passwordController.dispose();
     emailController.dispose();
@@ -26,15 +25,29 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  final passwordTextField = const TextField(
-    decoration: InputDecoration(
-      labelText: 'Password',
-    ),
-    obscureText: true,
-  );
-
   @override
   Widget build(BuildContext context) {
+    var emailTextField = Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: TextField(
+        controller: emailController,
+        decoration: const InputDecoration(
+          labelText: 'Email',
+        ),
+      ),
+    );
+
+    var passwordTextField = Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: TextField(
+        controller: passwordController,
+        decoration: const InputDecoration(
+          labelText: 'Password',
+        ),
+        obscureText: true,
+      ),
+    );
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Register'),
@@ -43,20 +56,9 @@ class _RegisterPageState extends State<RegisterPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const SizedBox(height: 16),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-            ),
-          ),
+          emailTextField,
           const SizedBox(height: 16),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-            ),
-            obscureText: true,
-          ),
+          passwordTextField,
           const SizedBox(height: 16),
           ElevatedButton(
               onPressed: () {
@@ -85,11 +87,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void textFieldValidation() {
-    if (emailController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       _signUpBloc.signUp(
-          password: passwordController.text,
-          email: emailController.text);
+          password: passwordController.text, email: emailController.text);
     }
   }
 

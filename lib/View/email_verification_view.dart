@@ -35,8 +35,10 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-                'Please verify your email with OTP to your registered email address'),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text('Enter the OTP sent to ${widget.email}'),
+            ),
             const SizedBox(height: 50),
             OTPTextField(
               length: 6,
@@ -50,9 +52,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
                   pinEntered = pin; // Update pinEntered when OTP is completed
                 });
               },
-              onChanged: (pin) {
-                debugPrint("editing: $pin");
-              },
+              onChanged: (pin) {},
             ),
             StreamBuilder<ApiResponse<ConfirmSignUpResponse>>(
               stream: confirmSignUpBloc.signUpStream,
@@ -80,7 +80,6 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
             ElevatedButton(
               onPressed: () {
                 // Send email verification
-                debugPrint('OTP: $pinEntered');
                 sendEmailVerification(email: widget.email, pin: pinEntered);
               },
               child: const Text('Verify Email'),

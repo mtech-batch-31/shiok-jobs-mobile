@@ -169,7 +169,6 @@ class _LoginPageState extends State<LoginPage> {
         )),
         provider: AuthProvider.google,
       );
-      safePrint('Sign in result: $result');
       _handleSignInResult(result);
     } on AuthException catch (e) {
       showSnackBar(message: e.message);
@@ -195,12 +194,8 @@ class _LoginPageState extends State<LoginPage> {
       case AuthSignInStep.confirmSignUp:
       // Handle confirm sign up case
       case AuthSignInStep.done:
-        safePrint('Sign in is complete');
         TokenBloc().setSignInFlow(SignInFlow.google);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+        Navigator.pushNamed(context, '/home');
     }
   }
 }

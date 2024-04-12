@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shiok_jobs_flutter/Data/amplifyconfiguration.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:shiok_jobs_flutter/View/home_view.dart';
+import 'package:shiok_jobs_flutter/View/register_view.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'env/dev.env');
@@ -40,6 +42,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'Job Search App',
         theme: ThemeData(useMaterial3: true),
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => const HomePage(),
+          '/register': (context) => const RegisterPage(),
+        },
         home: Scaffold(
           body: const LoginPage(),
           backgroundColor: Colors.indigo[50],

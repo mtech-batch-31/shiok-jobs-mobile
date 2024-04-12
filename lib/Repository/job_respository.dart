@@ -12,7 +12,6 @@ class JobRepository {
 
   Future<List<JobSummary>?> getAllJobs() async {
     final jobApiEndPoint = '$apiURL/jobs';
-    debugPrint('Fetching all Jobs from $jobApiEndPoint');
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
       jobApiEndPoint,
@@ -22,7 +21,6 @@ class JobRepository {
 
   Future<List<JobSummary>?> getJobsByKeyword(String keyword) async {
     final jobApiEndPoint = '$apiURL/jobs?keywords=$keyword';
-    debugPrint('Fetching Jobs based on keywords from $jobApiEndPoint');
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
       jobApiEndPoint,
@@ -32,7 +30,6 @@ class JobRepository {
 
   Future<JobDetail> getJobById(int id) async {
     final jobApiEndPoint = '$apiURL/jobs/details?id=$id';
-    debugPrint('Fetching Job details from $jobApiEndPoint');
     _networkClient.setHeaders({'Content-Type': 'application/json'});
     final response = await _networkClient.get(
       jobApiEndPoint,

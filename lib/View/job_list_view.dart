@@ -49,20 +49,13 @@ class _JobListState extends State<JobList> {
             padding: const EdgeInsets.all(8.0),
             child: Card(child: searchTextField()),
           ),
-          // Expanded(
-          //   child: jobList.isEmpty
-          //       ? const Center(
-          //           child: CircularProgressIndicator(),
-          //         )
-          //       : listViewBuilder(),
-          // ),
           StreamBuilder(
               stream: _jobSummaryBloc.jobListStream,
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data != null) {
                   switch (snapshot.data?.status) {
                     case Status.loading:
-                      const Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     case Status.completed:
@@ -71,7 +64,7 @@ class _JobListState extends State<JobList> {
                       }
                       return listViewBuilder();
                     case Status.error:
-                      showSnackBar(
+                      return showSnackBar(
                           message: snapshot.data?.message ?? 'Error Occurred');
                     case null:
                   }

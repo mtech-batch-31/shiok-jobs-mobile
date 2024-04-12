@@ -27,7 +27,6 @@ class JobListingBloc {
 
   getAllJobList() async {
     try {
-      debugPrint('Fetching Jobs');
       _jobListController.sink.add(ApiResponse.loading('Fetching Jobs'));
       List<JobSummary> jobList =
           await _jobRepository.getAllJobs() as List<JobSummary>;

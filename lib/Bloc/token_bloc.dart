@@ -50,12 +50,7 @@ class TokenBloc {
           Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
       final result = await cognitoPlugin.fetchAuthSession();
       final accessToken = result.userPoolTokens?.accessToken.raw;
-      final idToken = result.userPoolTokens?.idToken.raw;
-      safePrint('Access token: $accessToken');
-      safePrint('ID token: $idToken');
-      final identityId = result.identityIdResult.value;
-      safePrint("Current user's identity ID: $identityId");
-      return idToken;
+      return accessToken;
     } on AuthException catch (e) {
       safePrint('Error retrieving auth session: ${e.message}');
     }
