@@ -31,6 +31,7 @@ class _JobDetailViewState extends State<JobDetailView> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StreamBuilder(
                 stream: _jobSummaryBloc.jobDetailStream,

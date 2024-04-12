@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_apply_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_detailed_response.dart';

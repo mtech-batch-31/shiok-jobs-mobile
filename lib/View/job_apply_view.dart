@@ -30,6 +30,7 @@ class _JobApplyViewState extends State<JobApplyView> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StreamBuilder(
                 stream: _jobApplyBloc.jobApplyStream,
@@ -69,7 +70,14 @@ class _JobApplyViewState extends State<JobApplyView> {
   Widget completedView() {
     return Column(
       children: [
+        Image.asset(
+          'assets/images/success.png',
+          width: 100,
+          fit: BoxFit.cover,
+        ),
+        const SizedBox(),
         const Text('Job Applied Successfully'),
+        const SizedBox(),
         ElevatedButton(
           onPressed: () {
             Navigator.popUntil(context, ModalRoute.withName('/home'));

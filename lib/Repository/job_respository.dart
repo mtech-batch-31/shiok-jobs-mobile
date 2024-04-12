@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shiok_jobs_flutter/Data/request/apply_job_request.dart';
 import 'package:shiok_jobs_flutter/Data/response/job_apply_response.dart';
