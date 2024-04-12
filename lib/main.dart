@@ -77,10 +77,9 @@ class _MyAppState extends State<MyApp> {
 
   _checkJailbreak() async {
     bool jail = await FlutterJailbreakDetection.jailbroken;
-    bool developerMode =
-        await FlutterJailbreakDetection.developerMode; // android only.
+    // bool developerMode = await FlutterJailbreakDetection.developerMode;
     setState(() {
-      _jailbroken = jail || developerMode;
+      _jailbroken = jail;
     });
   }
 }

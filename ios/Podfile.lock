@@ -1,9 +1,11 @@
 PODS:
+  - Alamofire (4.9.1)
   - amplify_auth_cognito (0.0.1):
     - Flutter
     - FlutterMacOS
   - amplify_secure_storage (0.0.1):
     - Flutter
+  - CryptoSwift (1.8.2)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -11,6 +13,10 @@ PODS:
     - Flutter
     - IOSSecuritySuite
   - flutter_secure_storage (6.0.0):
+    - Flutter
+  - http_certificate_pinning (1.0.3):
+    - Alamofire (~> 4.9.1)
+    - CryptoSwift
     - Flutter
   - IOSSecuritySuite (2.0.1)
   - package_info_plus (0.4.5):
@@ -28,12 +34,15 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_jailbreak_detection (from `.symlinks/plugins/flutter_jailbreak_detection/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - http_certificate_pinning (from `.symlinks/plugins/http_certificate_pinning/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - CryptoSwift
     - IOSSecuritySuite
 
 EXTERNAL SOURCES:
@@ -49,6 +58,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_jailbreak_detection/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  http_certificate_pinning:
+    :path: ".symlinks/plugins/http_certificate_pinning/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -57,12 +68,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   amplify_auth_cognito: 76b5a54f05f66f69966b468b8121a0dd33a32c70
   amplify_secure_storage: 501cbdac671a050090d48dfcc002d5637d3f4a55
+  CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_jailbreak_detection: c5bf66ff6c0c4230769b6ba0bd63eb6ac4148a76
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  http_certificate_pinning: 2a9097b304c7ea3b51804af46d381aba8108fa29
   IOSSecuritySuite: 9f9ff40a083e1587929c21c6de5d25a673d2a7fe
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
