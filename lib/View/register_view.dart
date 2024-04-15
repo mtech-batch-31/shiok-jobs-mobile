@@ -15,6 +15,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   var errorMessage = '';
+  var _privacyPolicyAccepted = false;
 
   final _signUpBloc = SignUpBloc();
 
@@ -65,7 +66,11 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 16),
           ElevatedButton(
               onPressed: () {
-                textFieldValidation();
+                if (_privacyPolicyAccepted == false) {
+                  showSnackBar(message: 'Please read the privacy policy');
+                } else {
+                  textFieldValidation();
+                }
               },
               child: const Text('Register')),
           StreamBuilder(
@@ -134,6 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
+                    _privacyPolicyAccepted = true;
                     Navigator.pushNamed(context, '/privacy');
                   }),
             const TextSpan(
