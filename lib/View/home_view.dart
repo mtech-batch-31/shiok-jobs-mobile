@@ -3,7 +3,7 @@ import 'package:shiok_jobs_flutter/View/job_list_view.dart';
 import 'package:shiok_jobs_flutter/View/profile_view.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }

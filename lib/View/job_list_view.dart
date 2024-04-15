@@ -43,7 +43,7 @@ class _JobListState extends State<JobList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('JobSummary List'),
-        actions: [logoutIcon()],
+        actions: const [LogoutIcon()],
       ),
       body: Column(
         children: <Widget>[

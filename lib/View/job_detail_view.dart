@@ -31,7 +31,7 @@ class _JobDetailViewState extends State<JobDetailView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Job Detail'),
-        actions: [logoutIcon()],
+        actions: const [LogoutIcon()],
       ),
       body: Center(
         child: Column(

@@ -28,7 +28,7 @@ class _JobApplyViewState extends State<JobApplyView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Job Apply'),
-        actions: [logoutIcon()],
+        actions: const [LogoutIcon()],
       ),
       body: Center(
         child: Column(
