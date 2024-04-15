@@ -34,7 +34,7 @@ jobs:
         with:
           channel: "stable"
       - name: Snyk monitor
-        run: snyk test
+        run: ls -al && snyk monitor
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
