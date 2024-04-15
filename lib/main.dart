@@ -7,6 +7,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:shiok_jobs_flutter/View/home_view.dart';
 import 'package:shiok_jobs_flutter/View/register_view.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
+import 'package:shiok_jobs_flutter/View/privacy_web_view.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'env/dev.env');
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
           '/login': (context) => const LoginPage(),
           '/home': (context) => const HomePage(),
           '/register': (context) => const RegisterPage(),
+          '/privacy': (context) => const PrivacyWebView(),
         },
         home: scaffoldDisplay);
   }

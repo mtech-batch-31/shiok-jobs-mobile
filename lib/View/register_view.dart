@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
 import 'package:shiok_jobs_flutter/View/email_verification_view.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -59,6 +61,8 @@ class _RegisterPageState extends State<RegisterPage> {
           emailTextField,
           const SizedBox(height: 16),
           passwordTextField,
+          const SizedBox(height: 32),
+          privacyPolicyLinkAndTermsOfService(),
           const SizedBox(height: 16),
           ElevatedButton(
               onPressed: () {
@@ -113,5 +117,30 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
     });
+  }
+
+  Widget privacyPolicyLinkAndTermsOfService() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Center(
+          child: Text.rich(TextSpan(
+              text: 'By registering, I agree to the ',
+              children: <TextSpan>[
+            TextSpan(
+                text: 'Privacy Policy',
+                style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Color.fromARGB(255, 0, 140, 255),
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, '/privacy');
+                  }),
+            const TextSpan(
+                text:
+                    ' and consent to the collection, storage and use of my personal data as described in that policy.')
+          ]))),
+    );
   }
 }
