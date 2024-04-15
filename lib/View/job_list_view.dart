@@ -66,7 +66,7 @@ class _JobListState extends State<JobList> {
                       }
                       return listViewBuilder();
                     case Status.error:
-                      return showSnackBar(
+                      showSnackBar(
                           message: snapshot.data?.message ?? 'Error Occurred');
                     case null:
                   }

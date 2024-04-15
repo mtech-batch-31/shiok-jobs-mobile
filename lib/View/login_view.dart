@@ -1,7 +1,6 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Bloc/token_bloc.dart';
-import 'package:shiok_jobs_flutter/View/home_view.dart';
 import 'package:shiok_jobs_flutter/View/register_view.dart';
 import 'package:shiok_jobs_flutter/Bloc/login_bloc.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
@@ -89,14 +88,22 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16),
             passwordTextField(),
             const SizedBox(height: 16),
-            loginValidationStreamBuilder,
-            ElevatedButton(
-              onPressed: routeToRegisterPage,
-              child: const Text('Register'),
-            ),
-            ElevatedButton(
-                onPressed: socialSignIn,
-                child: const Text('Sign in with Google'))
+            IntrinsicWidth(
+                child:
+                    SizedBox(width: 250, child: loginValidationStreamBuilder)),
+            IntrinsicWidth(
+                child: SizedBox(
+              width: 250,
+              child: ElevatedButton(
+                  onPressed: routeToRegisterPage,
+                  child: const Text('Register')),
+            )),
+            IntrinsicWidth(
+                child: SizedBox(
+                    width: 250,
+                    child: ElevatedButton(
+                        onPressed: socialSignIn,
+                        child: const Text('Sign in with Google'))))
           ],
         ),
       ),
