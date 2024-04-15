@@ -30,14 +30,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    userController.addListener(() {
-      _loginBloc.changeUser(userController.text);
-    });
-
-    passwordController.addListener(() {
-      _loginBloc.changePassword(passwordController.text);
-    });
-
     var loginStreamBuilder = StreamBuilder(
         stream: _loginBloc.login,
         builder: (context, snapshot) {
@@ -59,22 +51,6 @@ class _LoginPageState extends State<LoginPage> {
           return const SizedBox();
         });
 
-    var loginValidationStreamBuilder = StreamBuilder(
-      stream: _loginBloc.submitValid,
-      builder: (context, snapshot) {
-        return ElevatedButton(
-          onPressed: () {
-            if (snapshot.hasData && snapshot.data == true) {
-              postLoginAPI();
-            } else {
-              showSnackBar(message: 'Please enter valid username and password');
-            }
-          },
-          child: const Text('Login'),
-        );
-      },
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
@@ -89,8 +65,14 @@ class _LoginPageState extends State<LoginPage> {
             passwordTextField(),
             const SizedBox(height: 16),
             IntrinsicWidth(
-                child:
-                    SizedBox(width: 250, child: loginValidationStreamBuilder)),
+                child: SizedBox(
+                    width: 250,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        postLoginAPI();
+                      },
+                      child: const Text('Login'),
+                    ))),
             IntrinsicWidth(
                 child: SizedBox(
               width: 250,
