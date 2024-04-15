@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
 import 'package:shiok_jobs_flutter/View/email_verification_view.dart';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
