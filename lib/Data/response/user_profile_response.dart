@@ -8,60 +8,49 @@ class UserProfileResponse {
   final List<WorkExperience>? workExperiences;
   final List<Education>? educationHistories;
 
-  UserProfileResponse({
-    this.email,
-    this.fullName,
-    this.isSeekingJob,
-    this.jobTitle,
-    this.imageUrl,
-    this.about,
-    this.workExperiences,
-    this.educationHistories
-  });
+  UserProfileResponse(
+      {this.email,
+      this.fullName,
+      this.isSeekingJob,
+      this.jobTitle,
+      this.imageUrl,
+      this.about,
+      this.workExperiences,
+      this.educationHistories});
 
   factory UserProfileResponse.fromJson(Map<String, dynamic> json) =>
       UserProfileResponse(
-        email: json['status'] as String?,
-        fullName: json['message'] as String?,
-        isSeekingJob: json['message'] as bool?,
-        jobTitle: json['message'] as String?,
-        imageUrl: json['message'] as String?,
-        about: json['message'] as String?,
-        // workExperiences: json['data'] != null
-        //     ? (json['data'] as List)
-        //     .map((e) => WorkExperience(
-        //   id: e['id'],
-        //   company: e['company'],
-        //   logo: e['logo'],
-        //   jobTitle: e['jobTitle'],
-        //   salaryRange: e['salaryRange'],
-        //   level: e['level'],
-        //   postedAt: DateTime.parse(e['postedAt']),
-        //   employmentType: e['employmentType'],
-        //   location: e['location'],
-        //   skills: List<String>.from(e['skills']),
-        //   closingDate: e['closingDate'],
-        // ))
-        //     .toList()
-        //     : null,
-        //
-        // educationHistories: json['data'] != null
-        //     ? (json['data'] as List)
-        //     .map((e) => Education(
-        //   id: e['id'],
-        //   company: e['company'],
-        //   logo: e['logo'],
-        //   jobTitle: e['jobTitle'],
-        //   salaryRange: e['salaryRange'],
-        //   level: e['level'],
-        //   postedAt: DateTime.parse(e['postedAt']),
-        //   employmentType: e['employmentType'],
-        //   location: e['location'],
-        //   skills: List<String>.from(e['skills']),
-        //   closingDate: e['closingDate'],
-        // ))
-        //     .toList()
-        //     : null,
+        email: json['email'] as String?,
+        fullName: json['name'] as String?,
+        isSeekingJob: json['seeking'] as bool?,
+        jobTitle: json['jobTitle'] as String?,
+        imageUrl: json['image'] as String?,
+        about: json['about'] as String?,
+        workExperiences: json['workExperience'] != null
+            ? (json['workExperience'] as List)
+                .map((e) => WorkExperience(
+                      id: e['id'],
+                      company: e['company'],
+                      logoUrl: e['logo'],
+                      jobTitle: e['jobTitle'],
+                      yearStart: e['yearStart'],
+                      yearEnd: e['yearEnd'],
+                      experience: e['experience'],
+                    ))
+                .toList()
+            : null,
+        educationHistories: json['education'] != null
+            ? (json['education'] as List)
+                .map((e) => Education(
+                      id: e['id'],
+                      school: e['school'],
+                      yearStart: e['yearStart'],
+                      yearEnd: e['yearEnd'],
+                      logoUrl: e['logo'],
+                      description: e['description'],
+                    ))
+                .toList()
+            : null,
       );
 }
 
@@ -72,17 +61,16 @@ class WorkExperience {
   final String? yearEnd;
   final String? jobTitle;
   final String? logoUrl;
-  final DateTime? experience;
+  final String? experience;
 
-  WorkExperience({
-    this.id,
-    this.company,
-    this.yearStart,
-    this.yearEnd,
-    this.jobTitle,
-    this.logoUrl,
-    this.experience
-  });
+  WorkExperience(
+      {this.id,
+      this.company,
+      this.yearStart,
+      this.yearEnd,
+      this.jobTitle,
+      this.logoUrl,
+      this.experience});
 }
 
 class Education {
@@ -93,12 +81,11 @@ class Education {
   final String? logoUrl;
   final String? description;
 
-  Education({
-    this.id,
-    this.school,
-    this.yearStart,
-    this.yearEnd,
-    this.logoUrl,
-    this.description
-  });
+  Education(
+      {this.id,
+      this.school,
+      this.yearStart,
+      this.yearEnd,
+      this.logoUrl,
+      this.description});
 }
