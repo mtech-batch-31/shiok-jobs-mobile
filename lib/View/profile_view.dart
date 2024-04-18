@@ -55,8 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget showUserProfile(UserProfileResponse userProfileResponse) {
-    print(
-        "Show User Profile length: ${userProfileResponse.workExperiences?.length}}");
+
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -104,13 +103,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          userProfileResponse.workExperiences?[index].jobTitle
+                          userProfileResponse.workExperiences?[index].company
                                   .toString() ??
                               "",
                           style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 18)),
+                      Text(userProfileResponse.workExperiences![index].jobTitle.toString()),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text("${userProfileResponse.workExperiences![index].yearStart} - ${userProfileResponse.workExperiences![index].yearStart}"),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(userProfileResponse.workExperiences![index].experience.toString()),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ]);
               }),
           const SizedBox(
@@ -131,12 +141,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Text(
                           userProfileResponse.educationHistories?[index].school
-                                  .toString() ??
+                              .toString() ??
                               "",
                           style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 18)),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text("${userProfileResponse.educationHistories![index].yearStart} - ${userProfileResponse.educationHistories![index].yearStart}"),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(userProfileResponse.educationHistories![index].description.toString()),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ]);
               })
         ],
