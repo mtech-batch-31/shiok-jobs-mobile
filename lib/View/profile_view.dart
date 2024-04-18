@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
         actions: const [LogoutIcon()],
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             StreamBuilder(
@@ -55,12 +55,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget showUserProfile(UserProfileResponse userProfileResponse) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
+    print(
+        "Show User Profile length: ${userProfileResponse.workExperiences?.length}}");
+    return Container(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(userProfileResponse.fullName.toString(),
@@ -73,8 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Text(
                 "${userProfileResponse.isSeekingJob! ? "" : "Not "}Open to Jobs",
-                style:
-                    const TextStyle(color: Color.fromRGBO(116, 219, 251, 1)),
+                style: const TextStyle(color: Color.fromRGBO(116, 219, 251, 1)),
               ),
               const SizedBox(
                 height: 10,
@@ -85,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Text(userProfileResponse.about.toString()),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               const Text("Work Experiences",
                   style: TextStyle(
@@ -94,10 +95,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontWeight: FontWeight.bold)),
             ],
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: ListView.builder(
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               itemCount: userProfileResponse.workExperiences?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
@@ -109,30 +109,38 @@ class _ProfilePageState extends State<ProfilePage> {
                               "",
                           style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 28,
+                              fontSize: 23,
                               fontWeight: FontWeight.bold)),
                     ]);
               }),
-        ),
-        // Expanded(
-        //     child: ListView.builder(
-        //         itemCount: userProfileResponse.educationHistories?.length,
-        //         itemBuilder: (BuildContext context, int index) {
-        //           return Column(
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text(
-        //                     userProfileResponse
-        //                             .educationHistories?[index].school
-        //                             .toString() ??
-        //                         "",
-        //                     style: const TextStyle(
-        //                         color: Colors.black,
-        //                         fontSize: 28,
-        //                         fontWeight: FontWeight.bold)),
-        //               ]);
-        //         }))
-      ],
+          const SizedBox(
+            height: 15,
+          ),
+          const Text("Education",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold)),
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: userProfileResponse.educationHistories?.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          userProfileResponse.educationHistories?[index].school
+                                  .toString() ??
+                              "",
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold)),
+                    ]);
+              })
+        ],
+      ),
     );
   }
 }
