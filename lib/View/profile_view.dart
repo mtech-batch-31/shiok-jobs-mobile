@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('Profile'),
         actions: const [LogoutIcon()],
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Column(
