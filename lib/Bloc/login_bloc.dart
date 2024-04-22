@@ -52,6 +52,12 @@ class LoginBloc {
     }
   }
 
+  logout() {
+    _loginController.sink.add(ApiResponse.loading('Logging Out'));
+    TokenBloc().deleteToken();
+    _loginController.sink.add(ApiResponse.completed(LoginResponse()));
+  }
+
   dispose() {
     _loginController.close();
   }

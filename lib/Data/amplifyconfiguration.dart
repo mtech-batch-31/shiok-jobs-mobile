@@ -40,8 +40,7 @@ const amplifyconfig = ''' {
                 "phone",
                 "email",
                 "openid"
-              ],
-              "responseType": "token"
+              ]
             }
           }
         }
