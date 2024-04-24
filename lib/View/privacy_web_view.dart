@@ -6,9 +6,17 @@ class PrivacyWebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const urlPath = 'https://d2loqognvf0v5n.cloudfront.net/privacy-policy';
     final controller = WebViewController();
-    controller.loadRequest(
-        Uri.parse('https://d2loqognvf0v5n.cloudfront.net/privacy-policy'));
+    controller.loadRequest(Uri.parse(urlPath));
+    controller.setNavigationDelegate(
+        NavigationDelegate(onNavigationRequest: (request) {
+      if (request.url.contains(urlPath)) {
+        return Future.value(NavigationDecision.navigate);
+      } else {
+        return Future.value(NavigationDecision.prevent);
+      }
+    }));
 
     return Scaffold(
         appBar: AppBar(
