@@ -46,7 +46,7 @@ jobs:
         with:
           channel: "stable"
       - name: OSV-Scanner
-        run: chmod +x osv-canner && ./osv-scanner -r .
+        run: chmod +x osv-scanner && ./osv-scanner -r .
 
   build-and-test:
     runs-on: ubuntu-latest
