@@ -37,6 +37,16 @@ jobs:
   #       run: ls -al && snyk monitor
   #       env:
   #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: snyk/actions/setup@master
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+      - name: OSV-Scanner
+        run: chmod +x osv-canner && ./osv-scanner -r .
 
   build-and-test:
     runs-on: ubuntu-latest
