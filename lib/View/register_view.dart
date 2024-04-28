@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shiok_jobs_flutter/Bloc/sign_up_bloc.dart';
 import 'package:shiok_jobs_flutter/View/email_verification_view.dart';
@@ -11,32 +12,44 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final userNameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   var errorMessage = '';
+  var _privacyPolicyAccepted = false;
 
   final _signUpBloc = SignUpBloc();
 
   @override
-  @override
   void dispose() {
-    userNameController.dispose();
     passwordController.dispose();
     emailController.dispose();
     _signUpBloc.dispose();
     super.dispose();
   }
 
-  final passwordTextField = const TextField(
-    decoration: InputDecoration(
-      labelText: 'Password',
-    ),
-    obscureText: true,
-  );
-
   @override
   Widget build(BuildContext context) {
+    var emailTextField = Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: TextField(
+        controller: emailController,
+        decoration: const InputDecoration(
+          labelText: 'Email',
+        ),
+      ),
+    );
+
+    var passwordTextField = Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: TextField(
+        controller: passwordController,
+        decoration: const InputDecoration(
+          labelText: 'Password',
+        ),
+        obscureText: true,
+      ),
+    );
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Register'),
@@ -44,31 +57,20 @@ class _RegisterPageState extends State<RegisterPage> {
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          TextField(
-            controller: userNameController,
-            decoration: const InputDecoration(
-              labelText: 'Username',
-            ),
-          ),
           const SizedBox(height: 16),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-            ),
-          ),
+          emailTextField,
           const SizedBox(height: 16),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-            ),
-            obscureText: true,
-          ),
+          passwordTextField,
+          const SizedBox(height: 32),
+          privacyPolicyLinkAndTermsOfService(),
           const SizedBox(height: 16),
           ElevatedButton(
               onPressed: () {
-                textFieldValidation();
+                if (_privacyPolicyAccepted == false) {
+                  showSnackBar(message: 'Please read the privacy policy');
+                } else {
+                  textFieldValidation();
+                }
               },
               child: const Text('Register')),
           StreamBuilder(
@@ -93,12 +95,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void textFieldValidation() {
-    if (userNameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       _signUpBloc.signUp(
-          user: userNameController.text,
-          password: passwordController.text,
-          email: emailController.text);
+          password: passwordController.text, email: emailController.text);
     }
   }
 
@@ -108,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
         context,
         MaterialPageRoute(
             builder: (context) => EmailVerificationView(
-                  userName: userNameController.text,
+                  email: emailController.text,
                 )),
       );
     });
@@ -122,5 +121,31 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
     });
+  }
+
+  Widget privacyPolicyLinkAndTermsOfService() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Center(
+          child: Text.rich(TextSpan(
+              text: 'By registering, I agree to the ',
+              children: <TextSpan>[
+            TextSpan(
+                text: 'Privacy Policy',
+                style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Color.fromARGB(255, 0, 140, 255),
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    _privacyPolicyAccepted = true;
+                    Navigator.pushNamed(context, '/privacy');
+                  }),
+            const TextSpan(
+                text:
+                    ' and consent to the collection, storage and use of my personal data as described in that policy.')
+          ]))),
+    );
   }
 }

@@ -15,15 +15,14 @@ class ConfirmSignUpBloc {
     return _signUpController.stream;
   }
 
-  sendEmailVerification({required String user, required String pin}) async {
+  sendEmailVerification({required String email, required String pin}) async {
     signUpSink.add(ApiResponse.loading('Sending Email Verification'));
     try {
       ConfirmSignUpResponse response =
-          await _signUpRepository.sendEmailVerification(user: user, pin: pin);
+          await _signUpRepository.sendEmailVerification(email: email, pin: pin);
       signUpSink.add(ApiResponse.completed(response));
     } catch (e) {
       signUpSink.add(ApiResponse.error(e.toString()));
-      //debugPrint(g);
     }
   }
 

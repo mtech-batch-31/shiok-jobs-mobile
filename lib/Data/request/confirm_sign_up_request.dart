@@ -1,15 +1,15 @@
 class ConfirmSignUpRequest {
-  final String username;
+  final String email;
   final String code;
 
   ConfirmSignUpRequest({
-    required this.username,
+    required this.email,
     required this.code,
   });
 
   toJson() {
     return {
-      'username': username,
+      'email': email,
       'code': code,
     };
   }

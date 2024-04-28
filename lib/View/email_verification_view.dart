@@ -7,9 +7,9 @@ import 'package:shiok_jobs_flutter/Data/response/confirm_sign_up_response.dart';
 import 'package:shiok_jobs_flutter/View/home_view.dart';
 
 class EmailVerificationView extends StatefulWidget {
-  const EmailVerificationView({required this.userName, super.key});
+  const EmailVerificationView({required this.email, super.key});
 
-  final String userName;
+  final String email;
 
   @override
   State<StatefulWidget> createState() => _EmailVerificationViewState();
@@ -17,6 +17,7 @@ class EmailVerificationView extends StatefulWidget {
 
 class _EmailVerificationViewState extends State<EmailVerificationView> {
   late ConfirmSignUpBloc confirmSignUpBloc;
+  late String pinEntered = '';
 
   @override
   void initState() {
@@ -26,7 +27,6 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
 
   @override
   Widget build(BuildContext context) {
-    var pinEntered = '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Email Verification'),
@@ -35,8 +35,10 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-                'Please verify your email with OTP to your registered email address'),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text('Enter the OTP sent to ${widget.email}'),
+            ),
             const SizedBox(height: 50),
             OTPTextField(
               length: 6,
@@ -46,12 +48,11 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
               textFieldAlignment: MainAxisAlignment.spaceAround,
               fieldStyle: FieldStyle.box,
               onCompleted: (pin) {
-                debugPrint("Completed: $pin");
-                pinEntered = pin;
+                setState(() {
+                  pinEntered = pin; // Update pinEntered when OTP is completed
+                });
               },
-              onChanged: (pin) {
-                debugPrint("editing: $pin");
-              },
+              onChanged: (pin) {},
             ),
             StreamBuilder<ApiResponse<ConfirmSignUpResponse>>(
               stream: confirmSignUpBloc.signUpStream,
@@ -79,8 +80,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
             ElevatedButton(
               onPressed: () {
                 // Send email verification
-                debugPrint('OTP: $pinEntered');
-                sendEmailVerification(user: widget.userName, pin: pinEntered);
+                sendEmailVerification(email: widget.email, pin: pinEntered);
               },
               child: const Text('Verify Email'),
             ),
@@ -90,8 +90,8 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
     );
   }
 
-  sendEmailVerification({required String user, required String pin}) async {
-    await confirmSignUpBloc.sendEmailVerification(user: user, pin: pin);
+  sendEmailVerification({required String email, required String pin}) async {
+    await confirmSignUpBloc.sendEmailVerification(email: email, pin: pin);
   }
 
   showSnackBar({required String message}) {
