@@ -12,6 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _userProfileBloc = UserProfileBloc();
+  bool _isEditingEmail = false;
 
   @override
   void initState() {
@@ -54,9 +55,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget showUserProfile(UserProfileResponse userProfileResponse) {
+    final TextEditingController _emailController = TextEditingController(text: userProfileResponse.email);
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    String? _emailError;
 
     return Container(
       padding: const EdgeInsets.all(20.0),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,6 +73,64 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                       fontSize: 30,
                       fontWeight: FontWeight.bold)),
+              const SizedBox(
+                height: 10,
+              ),
+              Form (
+              key: _formKey,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _isEditingEmail
+                        ?
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        errorText: _emailError,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email is required';
+                        }
+                        // print("email to validate " + value.toString());
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          return 'Invalid email format';
+                        }
+                        // print("something else happened " + value.toString());
+                        return null;
+                      },
+                    )
+                        : Text(
+                      userProfileResponse.email.toString(),
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+
+                        _isEditingEmail = !_isEditingEmail;
+                        // _emailError = null; // Clear previous error message
+                        if (!_isEditingEmail) {
+                          // Save changes
+                          final newEmail = _emailController.text;
+                          // Validate email input
+
+                          if (_formKey.currentState!.validate()) {
+                            // Send POST request to update email
+
+                            _userProfileBloc.updateUserEmail(newEmail,userProfileResponse);
+                          }
+                        }
+                      });
+                    },
+                    icon: Icon( _isEditingEmail  ? Icons.done : Icons.edit),
+                  ),
+                ],
+              )),
               const SizedBox(
                 height: 10,
               ),

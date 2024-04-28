@@ -1,14 +1,16 @@
-class UserProfileResponse {
-  final String? email;
-  final String? fullName;
-  final bool? isSeekingJob;
-  final String? jobTitle;
-  final String? imageUrl;
-  final String? about;
-  final List<WorkExperience>? workExperiences;
-  final List<Education>? educationHistories;
+import 'package:shiok_jobs_flutter/Data/response/user_profile_response.dart';
 
-  UserProfileResponse(
+class UserProfileRequest {
+  String? email;
+  String? fullName;
+  bool? isSeekingJob;
+  String? jobTitle;
+  String? imageUrl;
+  String? about;
+  List<WorkExperience>? workExperiences;
+  List<Education>? educationHistories;
+
+  UserProfileRequest(
       {this.email,
       this.fullName,
       this.isSeekingJob,
@@ -18,8 +20,8 @@ class UserProfileResponse {
       this.workExperiences,
       this.educationHistories});
 
-  factory UserProfileResponse.fromJson(Map<String, dynamic> json) =>
-      UserProfileResponse(
+  factory UserProfileRequest.fromJson(Map<String, dynamic> json) =>
+      UserProfileRequest(
         email: json['email'] as String?,
         fullName: json['name'] as String?,
         isSeekingJob: json['seeking'] as bool?,
@@ -69,65 +71,10 @@ class UserProfileResponse {
         }
         return data;
       }
+
+      // Setter method for email
+      void setEmail(String newEmail) {
+        email = newEmail;
+      }
 }
 
-class WorkExperience {
-  final int? id;
-  final String? company;
-  final String? yearStart;
-  final String? yearEnd;
-  final String? jobTitle;
-  final String? logoUrl;
-  final String? experience;
-
-  WorkExperience(
-      {this.id,
-      this.company,
-      this.yearStart,
-      this.yearEnd,
-      this.jobTitle,
-      this.logoUrl,
-      this.experience});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = id;
-    data['company'] = company;
-    data['yearStart'] = yearStart;
-    data['yearEnd'] = yearEnd;
-    data['jobTitle'] = jobTitle;
-    data['logo'] = logoUrl;
-    data['experience'] = experience;
-    return data;
-  }
-
-}
-
-class Education {
-  final int? id;
-  final String? school;
-  final String? yearStart;
-  final String? yearEnd;
-  final String? logoUrl;
-  final String? description;
-
-  Education(
-      {this.id,
-      this.school,
-      this.yearStart,
-      this.yearEnd,
-      this.logoUrl,
-      this.description});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = id;
-    data['school'] = school;
-    data['yearStart'] = yearStart;
-    data['yearEnd'] = yearEnd;
-    data['logo'] = logoUrl;
-    data['description'] = description;
-    return data;
-  }
-
-}
