@@ -11,6 +11,12 @@ on:
   pull_request:
     branches: "*"
 
+permissions:
+  # Require writing security events to upload SARIF file to security tab
+  security-events: write
+  # Only need to read contents
+  contents: read
+
 jobs:
   sonarcloud:
     name: SonarCloud
@@ -38,15 +44,7 @@ jobs:
   #       env:
   #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: "stable"
-      - name: OSV-Scanner
-        run: chmod +x osv-scanner && ./osv-scanner -r .
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.6.2-beta1"
 
   build-and-test:
     runs-on: ubuntu-latest
