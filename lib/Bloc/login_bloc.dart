@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'package:shiok_jobs_flutter/Data/response/api_response.dart';
 import 'package:shiok_jobs_flutter/Data/response/login_response.dart';
+import 'package:shiok_jobs_flutter/Data/response/logout_response.dart';
 import 'package:shiok_jobs_flutter/Repository/login_repository.dart';
 import 'package:shiok_jobs_flutter/Bloc/token_bloc.dart';
 
 class LoginBloc {
   final _loginController = StreamController<ApiResponse<LoginResponse>>();
+  final _logoutController = StreamController<ApiResponse<LogoutResponse>>();
   final _loginRepository = LoginRepository();
 
   Stream<ApiResponse<LoginResponse>> get login => _loginController.stream;
+  Stream<ApiResponse<LogoutResponse>> get logoutstream =>
+      _logoutController.stream;
 
   String? validateEmail(String email) {
     final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -52,8 +56,14 @@ class LoginBloc {
     }
   }
 
-  logout() {
+  logout() async {
     _loginController.sink.add(ApiResponse.loading('Logging Out'));
+    final token = await TokenBloc().getToken();
+    _loginRepository.logout(accessToken: token).then((response) {
+      _logoutController.sink.add(ApiResponse.completed(response));
+    }).catchError((error) {
+      _loginController.sink.add(ApiResponse.error(error.toString()));
+    });
     TokenBloc().deleteToken();
     _loginController.sink.add(ApiResponse.completed(LoginResponse()));
   }

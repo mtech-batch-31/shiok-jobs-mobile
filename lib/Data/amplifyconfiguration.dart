@@ -39,7 +39,8 @@ const amplifyconfig = ''' {
               "Scopes": [
                 "phone",
                 "email",
-                "openid"
+                "openid",
+                "aws.cognito.signin.user.admin"
               ]
             }
           }

@@ -26,18 +26,20 @@ class NetworkClient {
     return _handleResponse(response);
   }
 
-  Future<dynamic> post(String url, {required Map<String, dynamic> body}) async {
+  Future<dynamic> post(String url, {required dynamic body}) async {
     final response = await _sendRequest(url, method: 'POST', body: body);
     return _handleResponse(response);
   }
 
   Future<http.Response> _sendRequest(String url,
-      {String method = 'GET', Map<String, dynamic>? body}) async {
+      {String method = 'GET', dynamic body}) async {
     final uri = Uri.parse(url);
     final client = getClient([_certFingerPrint ?? '']);
     final request = http.Request(method, uri);
     request.headers.addAll(_headers);
-    if (body != null) {
+    if (body is Map<String, dynamic>) {
+      request.body = jsonEncode(body);
+    } else if (body != null) {
       request.body = jsonEncode(body);
     }
     switch (request.method) {
