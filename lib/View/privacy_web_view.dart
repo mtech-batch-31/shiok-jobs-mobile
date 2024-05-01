@@ -17,6 +17,7 @@ class PrivacyWebView extends StatelessWidget {
         return Future.value(NavigationDecision.prevent);
       }
     }));
+    controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 
     return Scaffold(
         appBar: AppBar(
