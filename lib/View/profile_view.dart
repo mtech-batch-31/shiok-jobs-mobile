@@ -55,9 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget showUserProfile(UserProfileResponse userProfileResponse) {
-    final TextEditingController _emailController = TextEditingController(text: userProfileResponse.email);
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    String? _emailError;
+    final TextEditingController emailController = TextEditingController(text: userProfileResponse.email);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    String? emailError;
 
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -77,17 +77,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Form (
-              key: _formKey,
+              key: formKey,
               child: Row(
                 children: [
                   Expanded(
                     child: _isEditingEmail
                         ?
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        errorText: _emailError,
+                        errorText: emailError,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -103,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                         : Text(
                       userProfileResponse.email.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
@@ -116,10 +116,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         // _emailError = null; // Clear previous error message
                         if (!_isEditingEmail) {
                           // Save changes
-                          final newEmail = _emailController.text;
+                          final newEmail = emailController.text;
                           // Validate email input
 
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             // Send POST request to update email
 
                             _userProfileBloc.updateUserEmail(newEmail,userProfileResponse);
