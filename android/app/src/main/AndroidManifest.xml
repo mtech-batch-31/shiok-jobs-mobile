@@ -8,6 +8,8 @@
     <application
         android:label="shiok_jobs_flutter"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="false"
+         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
